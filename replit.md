@@ -1,34 +1,64 @@
-# QC Help Support
+# QCHelp – Quezon City Community Support Hub
 
-A community-driven help and support platform for Quezon City residents. It enables real-time communication for emergency help, flood reporting, medical assistance, and lost-and-found services.
+A fully functional React + Vite front-end community platform for Quezon City residents. Users can report incidents, request help, view real-time alerts, and connect with neighbors across all QC barangays.
 
 ## Tech Stack
 
-- **Frontend**: Pure HTML5, CSS3, and Vanilla JavaScript (ES6+)
-- **Backend (Serverless)**: Firebase (Authentication, Realtime Database, Cloud Storage)
-- **Maps**: Leaflet.js
-- **No build system** — static files served directly
+- **Framework**: React 18 + Vite 5
+- **Routing**: React Router v6 (Hash Router)
+- **Icons**: Lucide React
+- **Fonts**: Inter (Google Fonts)
+- **Styling**: Plain CSS with CSS custom properties
+- **Server (dev)**: Vite dev server on port 5000
 
-## Project Layout
-
-```
-index.html   - Main UI shell with all modals, tabs, and navigation
-app.js       - All application logic, Firebase integration, real-time listeners
-style.css    - All styling with CSS variables for QC green theme
-server.js    - Simple Node.js static file server (port 5000)
-README.md    - Basic project description
-```
-
-## Running the App
-
-The app is served via a Node.js static HTTP server:
+## Project Structure
 
 ```
-node server.js
+src/
+  main.jsx            - App entry point
+  App.jsx             - Route definitions
+  index.css           - Global styles and design system
+  constants/
+    barangays.js      - QC barangays list, categories, sample data
+  components/
+    BottomNav.jsx     - Bottom navigation bar
+    PostCard.jsx      - Feed post card
+    SideMenu.jsx      - Slide-out side drawer
+  pages/
+    WelcomePage.jsx   - Landing/welcome screen
+    SignIn.jsx        - Sign in form
+    SignUp.jsx        - Sign up form with barangay dropdown
+    ResetPassword.jsx - Password reset
+    Home.jsx          - Main feed with alerts and posts
+    PostCreate.jsx    - Create new post
+    PostDetail.jsx    - Post detail with comments
+    MapPage.jsx       - Incident map (OpenStreetMap embed)
+    ChatList.jsx      - Conversations list
+    ChatUI.jsx        - Individual chat screen
+    ActivityPage.jsx  - Activity/notifications feed
+    ProfilePage.jsx   - User profile
+    AdminPanel.jsx    - Admin dashboard
 ```
 
-Listens on `0.0.0.0:5000`.
+## Running
 
-## Deployment
+```
+npm run dev
+```
 
-Configured as a **static** deployment — files are served directly with no build step required.
+Runs Vite on `0.0.0.0:5000`.
+
+## Building for Production
+
+```
+npm run build
+```
+
+Output goes to `dist/`. Deploy as static site.
+
+## Firebase-Ready Fields
+
+All forms include Firebase-compatible field names:
+- `email`, `password`, `fullName`, `barangay`, `contactNumber`, `agreeToTerms`
+- Posts: `postContent`, `category`, `priority`, `barangay`, `location`, `timestamp`
+- Messages: `message`, `timestamp`, `senderId`
