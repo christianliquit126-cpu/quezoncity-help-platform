@@ -1,55 +1,129 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Phone, MoreVertical, Paperclip, Send } from 'lucide-react'
-
-const INIT_MSGS = [
-  { id: 1, type: 'received', text: 'Hi, I saw your flood report. We can help!', time: '2:35' },
-  { id: 2, type: 'sent', text: 'Thank you so much! The water level is rising fast. We have 3 families stranded.', time: '2:36' },
-  { id: 3, type: 'received', text: "We're heading there now with 2 boats. ETA 20 minutes.", time: '2:37' },
-  { id: 4, type: 'sent', text: 'Please hurry, there are elderly people and a baby. We\'re near the bridge at Batasan Road.', time: '2:38' },
-  { id: 5, type: 'received', text: 'Understood. Stay elevated and signal us with a light or cloth. We will find you.', time: '2:39' },
-]
+import { Phone, MoreVertical, Paperclip, Send, Loader, Shield } from 'lucide-react'
+import { ref, onValue, push, update, serverTimestamp } from 'firebase/database'
+import { db } from '../firebase'
+import { useAuth } from '../contexts/AuthContext'
+import { timeAgo, initials, avatarColor } from '../utils/format'
 
 export default function ChatUI() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const [messages, setMessages] = useState(INIT_MSGS)
-  const [input, setInput] = useState('')
+  const { user, profile } = useAuth()
+  const [chat, setChat] = useState(null)
+  const [messages, setMessages] = useState([])
+  const [text, setText] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [sending, setSending] = useState(false)
   const bottomRef = useRef(null)
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages])
+  useEffect(() => {
+    const unsub = onValue(ref(db, `chats/${id}`), snap => {
+      if (snap.exists()) setChat({ id: snap.key, ...snap.val() })
+      setLoading(false)
+    })
+    return unsub
+  }, [id])
 
-  const send = () => {
-    if (!input.trim()) return
-    const now = new Date()
-    setMessages(m => [...m, { id: Date.now(), type: 'sent', text: input, time: `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}` }])
-    setInput('')
+  useEffect(() => {
+    const unsub = onValue(ref(db, `chats/${id}/messages`), snap => {
+      if (snap.exists()) {
+        const list = []
+        snap.forEach(child => list.push({ id: child.key, ...child.val() }))
+        list.sort((a, b) => a.sentAt - b.sentAt)
+        setMessages(list)
+      } else {
+        setMessages([])
+      }
+    })
+    return unsub
+  }, [id])
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+  const sendMessage = async () => {
+    if (!text.trim() || sending) return
+    setSending(true)
+    const msgData = {
+      senderId: user.uid,
+      senderName: profile?.displayName || user.displayName || 'Anonymous',
+      text: text.trim(),
+      sentAt: Date.now(),
+      readBy: { [user.uid]: true },
+    }
+    await push(ref(db, `chats/${id}/messages`), msgData)
+    await update(ref(db, `chats/${id}`), {
+      lastMessage: text.trim(),
+      lastMessageAt: Date.now(),
+    })
+    setText('')
+    setSending(false)
   }
+
+  if (loading) {
+    return (
+      <div className="chat-ui-shell">
+        <div className="empty-state" style={{ paddingTop: 80 }}><Loader size={32} className="spin" /></div>
+      </div>
+    )
+  }
+
+  const chatName = chat?.name || chat?.otherUserName || 'Chat'
+  const av = avatarColor(id)
+  const userAv = avatarColor(user?.uid)
+
+  let lastDate = ''
 
   return (
     <div className="chat-ui-shell">
       <div className="chat-nav">
-        <button className="back-btn" onClick={() => navigate('/chat')}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-        <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#ECFDF5', color: '#065F46', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13 }}>PL</div>
-        <div className="chat-nav-info">
-          <span className="chat-nav-name">Pedro Lim</span>
-          <span className="chat-online">Online</span>
+        <button className="back-btn" onClick={() => navigate('/chat')}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div style={{ width: 38, height: 38, borderRadius: '50%', background: chat?.isAdminChat ? '#DBEAFE' : av.bg, color: chat?.isAdminChat ? '#1D4ED8' : av.text, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>
+          {chat?.isAdminChat ? <Shield size={18} /> : initials(chatName)}
         </div>
-        <button className="icon-btn"><Phone size={18} /></button>
-        <button className="icon-btn"><MoreVertical size={18} /></button>
+        <div className="chat-nav-info">
+          <span className="chat-nav-name">{chatName}</span>
+          {chat?.isAdminChat && <span className="chat-online">QCHelp Official Support</span>}
+        </div>
+        <button className="icon-btn"><MoreVertical size={20} /></button>
       </div>
 
       <div className="chat-messages">
-        <div className="date-divider">Today, 2:35 PM</div>
-        {messages.map(m => (
-          <div key={m.id} className={`msg ${m.type}`}>
-            {m.type === 'received' && (
-              <div style={{ width: 26, height: 26, borderRadius: '50%', background: '#ECFDF5', color: '#065F46', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 9, flexShrink: 0 }}>PL</div>
-            )}
-            <div className="msg-bubble">{m.text}</div>
-            <span className="msg-time">{m.time}</span>
+        {messages.length === 0 && (
+          <div style={{ textAlign: 'center', color: 'var(--text-3)', fontSize: 13, padding: '40px 20px' }}>
+            No messages yet. Start the conversation!
           </div>
-        ))}
+        )}
+
+        {messages.map(msg => {
+          const isSent = msg.senderId === user?.uid
+          const msgDate = new Date(msg.sentAt).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })
+          const showDate = msgDate !== lastDate
+          lastDate = msgDate
+          const msgAv = isSent ? userAv : avatarColor(msg.senderId)
+
+          return (
+            <React.Fragment key={msg.id}>
+              {showDate && <div className="date-divider">{msgDate}</div>}
+              <div className={`msg ${isSent ? 'sent' : 'received'}`}>
+                {!isSent && (
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: msgAv.bg, color: msgAv.text, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 10, flexShrink: 0 }}>
+                    {initials(msg.senderName)}
+                  </div>
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: isSent ? 'flex-end' : 'flex-start', gap: 2 }}>
+                  {!isSent && <span style={{ fontSize: 11, color: 'var(--text-3)', marginBottom: 2 }}>{msg.senderName}</span>}
+                  <div className="msg-bubble">{msg.text}</div>
+                  <span className="msg-time">{timeAgo(msg.sentAt)}</span>
+                </div>
+              </div>
+            </React.Fragment>
+          )
+        })}
         <div ref={bottomRef} />
       </div>
 
@@ -57,12 +131,14 @@ export default function ChatUI() {
         <button className="icon-btn"><Paperclip size={18} /></button>
         <input
           type="text"
-          placeholder="Type a message..."
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && send()}
+          placeholder="Type a message…"
+          value={text}
+          onChange={e => setText(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
         />
-        <button className="send-primary" onClick={send}><Send size={16} /></button>
+        <button className="send-primary" onClick={sendMessage} disabled={sending}>
+          {sending ? <Loader size={14} className="spin" /> : <Send size={16} />}
+        </button>
       </div>
     </div>
   )

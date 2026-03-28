@@ -5,7 +5,6 @@ import {
   Heart, Users, AlertCircle, ZoomIn, ZoomOut, Navigation
 } from 'lucide-react'
 import BottomNav from '../components/BottomNav'
-import { MAP_MARKERS } from '../constants/barangays'
 
 const LEGEND = [
   { type: 'emergency', label: 'Emergency', Icon: AlertTriangle, color: '#DC2626', bg: '#FEE2E2' },

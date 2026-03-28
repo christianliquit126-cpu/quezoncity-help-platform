@@ -1424,6 +1424,29 @@ body {
 .tbl-action-btn.blue { background: #EFF6FF; color: #2563EB; }
 .tbl-action-btn.blue:hover { background: #2563EB; color: #fff; }
 
+/* ── Spin animation (used with <Loader className="spin" />) ── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.spin { animation: spin .8s linear infinite; }
+
+/* ── Spinner (used in AuthContext loading state) ── */
+.spinner {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  animation: spin .7s linear infinite;
+}
+
+/* ── Error banner ── */
+.error-banner {
+  background: #FEF2F2; border: 1px solid #FECACA;
+  color: #DC2626; border-radius: var(--radius-sm);
+  padding: 10px 14px; font-size: 13px; font-weight: 500;
+  margin-bottom: 16px; line-height: 1.4;
+}
+
 /* ── Responsive: collapse dashboard for narrow viewport ── */
 @media (max-width: 768px) {
   .dashboard-shell { flex-direction: column; }

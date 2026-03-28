@@ -1,51 +1,86 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Mail, KeyRound, CheckCircle } from 'lucide-react'
+import { Mail, KeyRound, CheckCircle, MapPin } from 'lucide-react'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
+  const { resetPassword } = useAuth()
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e) => {
+  const handle = async (e) => {
     e.preventDefault()
-    setSent(true)
+    setError('')
+    setLoading(true)
+    try {
+      await resetPassword(email)
+      setSent(true)
+    } catch (err) {
+      setError(err.code === 'auth/user-not-found' ? 'No account found with this email.' : 'Failed to send reset email. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="auth-shell">
       <div className="auth-top-bar">
-        <button className="back-btn" onClick={() => navigate('/signin')}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button className="back-btn" onClick={() => navigate('/signin')}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div className="logo-row">
+          <div className="logo-dot"><MapPin size={16} /></div>
+          <span className="logo-name">QCHelp</span>
+        </div>
         <div style={{ width: 36 }} />
       </div>
-      <div className="auth-body" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-        <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24 }}>
-          <KeyRound size={32} color="var(--primary)" />
+
+      <div className="auth-body">
+        <div style={{ width: 56, height: 56, borderRadius: 16, background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+          <KeyRound size={26} color="#2563EB" />
         </div>
-        <h2 className="auth-title">Forgot Password?</h2>
-        <p className="auth-sub" style={{ maxWidth: 280 }}>Enter your email and we will send you instructions to reset your password.</p>
 
-        {!sent ? (
-          <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: 8 }}>
-            <div className="form-group" style={{ textAlign: 'left' }}>
-              <label className="form-label">Email Address</label>
-              <div className="input-wrap">
-                <Mail size={16} className="i-left" />
-                <input type="email" name="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" />
-              </div>
+        {sent ? (
+          <div style={{ textAlign: 'center', paddingTop: 8 }}>
+            <div style={{ width: 64, height: 64, background: '#F0FDF4', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <CheckCircle size={32} color="#059669" />
             </div>
-            <button type="submit" className="btn btn-primary btn-full">Send Reset Link</button>
-          </form>
-        ) : (
-          <div style={{ width: '100%', background: 'var(--green-light)', borderRadius: 'var(--radius-sm)', padding: '16px', display: 'flex', alignItems: 'center', gap: 10, marginTop: 16 }}>
-            <CheckCircle size={20} color="var(--green)" />
-            <span style={{ fontSize: 14, color: 'var(--green)', fontWeight: 600 }}>Reset link sent! Check your inbox.</span>
+            <h2 className="auth-title">Check your email</h2>
+            <p className="auth-sub" style={{ marginBottom: 28 }}>We sent a password reset link to <strong>{email}</strong>. Check your inbox and follow the link to reset your password.</p>
+            <button className="btn btn-primary btn-full" onClick={() => navigate('/signin')}>Back to Sign In</button>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', marginTop: 16 }}>
+              Didn't receive it?{' '}
+              <button className="link-btn" onClick={() => setSent(false)}>Try again</button>
+            </p>
           </div>
-        )}
+        ) : (
+          <>
+            <h2 className="auth-title">Forgot password?</h2>
+            <p className="auth-sub">Enter your email and we'll send you a link to reset your password.</p>
 
-        <p className="auth-footer" style={{ marginTop: 24 }}>
-          <button className="link-btn" onClick={() => navigate('/signin')}>Back to Sign In</button>
-        </p>
+            {error && <div className="error-banner">{error}</div>}
+
+            <form onSubmit={handle}>
+              <div className="form-group">
+                <label className="form-label">Email Address</label>
+                <div className="input-wrap">
+                  <Mail size={16} className="i-left" />
+                  <input type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required autoFocus />
+                </div>
+              </div>
+              <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
+                {loading ? 'Sending…' : 'Send Reset Link'}
+              </button>
+            </form>
+
+            <p className="auth-footer" style={{ marginTop: 20 }}>
+              <button className="link-btn" onClick={() => navigate('/signin')}>Back to Sign In</button>
+            </p>
+          </>
+        )}
       </div>
     </div>
   )

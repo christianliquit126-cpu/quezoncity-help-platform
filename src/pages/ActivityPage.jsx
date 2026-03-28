@@ -1,82 +1,70 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Heart, MessageCircle, Bell, CheckCircle, UserPlus, Share2,
-  Star, Filter, User, ThumbsUp, Flag, Clock
-} from 'lucide-react'
+import { Heart, MessageCircle, Bell, CheckCircle, UserPlus, Share2, Star, Filter, ThumbsUp, Flag, Clock, Loader } from 'lucide-react'
+import { ref, onValue, update } from 'firebase/database'
+import { db } from '../firebase'
+import { useAuth } from '../contexts/AuthContext'
+import { timeAgo } from '../utils/format'
 import BottomNav from '../components/BottomNav'
-
-const ALL_ACTIVITIES = [
-  {
-    id: 1, type: 'reaction', tab: 'Reactions',
-    Icon: ThumbsUp, color: 'blue',
-    text: <><strong>Pedro Lim</strong> and <strong>18 others</strong> reacted to your flood report in Batasan Hills.</>,
-    time: '2 minutes ago', ts: Date.now() - 120000, read: false,
-  },
-  {
-    id: 2, type: 'comment', tab: 'Mentions',
-    Icon: MessageCircle, color: 'green',
-    text: <><strong>Rosa Bautista</strong> commented on your post: "I have the life vests ready at the evacuation center."</>,
-    time: '8 minutes ago', ts: Date.now() - 480000, read: false,
-  },
-  {
-    id: 3, type: 'system', tab: 'System',
-    Icon: Bell, color: 'purple',
-    text: <><strong>QCDRRMO</strong> issued a new flood advisory for Batasan Hills and Commonwealth areas. Rainfall Advisory #2.</>,
-    time: '15 minutes ago', ts: Date.now() - 900000, read: false,
-  },
-  {
-    id: 4, type: 'resolve', tab: 'System',
-    Icon: CheckCircle, color: 'green',
-    text: <>Your post about the stranded family in <strong>Batasan Hills</strong> was marked as <strong>resolved</strong> by Admin.</>,
-    time: '1 hour ago', ts: Date.now() - 3600000, read: true,
-  },
-  {
-    id: 5, type: 'follow', tab: 'Mentions',
-    Icon: UserPlus, color: 'blue',
-    text: <><strong>Noel Garcia</strong> mentioned you in a comment: "@JuandelaCruz please check the Fairview update."</>,
-    time: '3 hours ago', ts: Date.now() - 10800000, read: true,
-  },
-  {
-    id: 6, type: 'share', tab: 'Reactions',
-    Icon: Share2, color: 'pink',
-    text: <><strong>Ana Villanueva</strong> shared your traffic alert post about EDSA-Cubao to the QC Community group.</>,
-    time: '5 hours ago', ts: Date.now() - 18000000, read: true,
-  },
-  {
-    id: 7, type: 'points', tab: 'System',
-    Icon: Star, color: 'orange',
-    text: <>You earned <strong>+15 reputation points</strong> for helping resolve the Payatas road incident.</>,
-    time: 'Yesterday, 4:12 PM', ts: Date.now() - 86400000, read: true,
-  },
-  {
-    id: 8, type: 'reaction', tab: 'Reactions',
-    Icon: Heart, color: 'pink',
-    text: <><strong>Carlos Mendoza</strong> and <strong>4 others</strong> reacted to your comment on the lost dog post in Fairview.</>,
-    time: 'Yesterday, 2:30 PM', ts: Date.now() - 90000000, read: true,
-  },
-  {
-    id: 9, type: 'system', tab: 'System',
-    Icon: Flag, color: 'red',
-    text: <>Admin reviewed your <strong>Sauyo flooding</strong> report and escalated it to QCDRRMO for immediate response.</>,
-    time: '2 days ago', ts: Date.now() - 172800000, read: true,
-  },
-]
 
 const TABS = ['All Activity', 'Mentions', 'Reactions', 'System']
 
-const TAB_COLORS = { blue: '#2563EB', green: '#059669', purple: '#7C3AED', orange: '#D97706', pink: '#DB2777', red: '#DC2626' }
-const TAB_BGS = { blue: '#EFF6FF', green: '#F0FDF4', purple: '#F5F3FF', orange: '#FFFBEB', pink: '#FDF2F8', red: '#FEF2F2' }
+const TYPE_CONFIG = {
+  like:    { Icon: Heart,          color: 'pink',   tab: 'Reactions' },
+  reaction:{ Icon: ThumbsUp,       color: 'blue',   tab: 'Reactions' },
+  comment: { Icon: MessageCircle,  color: 'green',  tab: 'Mentions' },
+  mention: { Icon: UserPlus,       color: 'blue',   tab: 'Mentions' },
+  share:   { Icon: Share2,         color: 'pink',   tab: 'Reactions' },
+  resolve: { Icon: CheckCircle,    color: 'green',  tab: 'System' },
+  system:  { Icon: Bell,           color: 'purple', tab: 'System' },
+  points:  { Icon: Star,           color: 'orange', tab: 'System' },
+  flag:    { Icon: Flag,           color: 'red',    tab: 'System' },
+}
+
+const COLOR_MAP = {
+  blue:   { bg: '#EFF6FF', color: '#2563EB' },
+  green:  { bg: '#F0FDF4', color: '#059669' },
+  purple: { bg: '#F5F3FF', color: '#7C3AED' },
+  orange: { bg: '#FFFBEB', color: '#D97706' },
+  pink:   { bg: '#FDF2F8', color: '#DB2777' },
+  red:    { bg: '#FEF2F2', color: '#DC2626' },
+}
 
 export default function ActivityPage() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const [activities, setActivities] = useState([])
   const [tab, setTab] = useState('All Activity')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!user) return
+    const unsub = onValue(ref(db, `activity/${user.uid}`), snap => {
+      if (snap.exists()) {
+        const list = []
+        snap.forEach(child => list.push({ id: child.key, ...child.val() }))
+        list.sort((a, b) => b.createdAt - a.createdAt)
+        setActivities(list)
+      } else {
+        setActivities([])
+      }
+      setLoading(false)
+    })
+    return unsub
+  }, [user])
+
+  const markRead = async (id) => {
+    if (!user) return
+    await update(ref(db, `activity/${user.uid}/${id}`), { read: true })
+  }
+
+  const cfg = (type) => TYPE_CONFIG[type] || TYPE_CONFIG.system
 
   const visible = tab === 'All Activity'
-    ? ALL_ACTIVITIES
-    : ALL_ACTIVITIES.filter(a => a.tab === tab)
+    ? activities
+    : activities.filter(a => cfg(a.type).tab === tab)
 
-  const unread = ALL_ACTIVITIES.filter(a => !a.read).length
+  const unread = activities.filter(a => !a.read).length
 
   return (
     <div className="shell">
@@ -93,34 +81,40 @@ export default function ActivityPage() {
 
       <div className="act-tabs">
         {TABS.map(t => (
-          <button key={t} className={`act-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
-            {t}
-          </button>
+          <button key={t} className={`act-tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>{t}</button>
         ))}
       </div>
 
       <div className="screen-body" style={{ paddingBottom: 80 }}>
-        {visible.length === 0 ? (
+        {loading ? (
+          <div className="empty-state" style={{ paddingTop: 60 }}><Loader size={32} className="spin" /><p>Loading activity…</p></div>
+        ) : visible.length === 0 ? (
           <div className="empty-state" style={{ paddingTop: 60 }}>
-            <User size={40} />
-            <p style={{ marginTop: 12, fontWeight: 600, color: 'var(--text-2)' }}>No activity yet</p>
+            <Bell size={40} />
+            <p style={{ fontWeight: 600, color: 'var(--text-2)', marginTop: 12 }}>No activity yet</p>
             <p style={{ fontSize: 13, color: 'var(--text-3)', marginTop: 4 }}>Start engaging with the community!</p>
           </div>
         ) : (
           <div className="act-list">
             {visible.map(a => {
-              const Icon = a.Icon
+              const { Icon, color } = cfg(a.type)
+              const c = COLOR_MAP[color] || COLOR_MAP.blue
               return (
-                <div key={a.id} className={`act-item ${!a.read ? 'unread' : ''}`}>
-                  <div
-                    className="act-icon"
-                    style={{ background: TAB_BGS[a.color], color: TAB_COLORS[a.color] }}
-                  >
+                <div
+                  key={a.id}
+                  className={`act-item ${!a.read ? 'unread' : ''}`}
+                  onClick={() => {
+                    markRead(a.id)
+                    if (a.postId) navigate(`/post/${a.postId}`)
+                  }}
+                  style={{ cursor: a.postId ? 'pointer' : 'default' }}
+                >
+                  <div className="act-icon" style={{ background: c.bg, color: c.color }}>
                     <Icon size={17} />
                   </div>
                   <div className="act-content">
                     <p className="act-text">{a.text}</p>
-                    <span className="act-time"><Clock size={11} /> {a.time}</span>
+                    <span className="act-time"><Clock size={11} /> {timeAgo(a.createdAt)}</span>
                   </div>
                   {!a.read && <span className="act-dot" />}
                 </div>

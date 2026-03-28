@@ -1,53 +1,126 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Edit, Search } from 'lucide-react'
+import { Edit, Search, MessageCircle, Loader, Plus, Shield } from 'lucide-react'
+import { ref, onValue, push, set } from 'firebase/database'
+import { db } from '../firebase'
+import { useAuth } from '../contexts/AuthContext'
+import { timeAgo, initials, avatarColor } from '../utils/format'
 import BottomNav from '../components/BottomNav'
-
-const CHATS = [
-  { id: 1, name: 'Pedro Lim', av: 'PL', avBg: '#ECFDF5', avColor: '#065F46', preview: "We're heading there now with 2 boats...", time: '2m', unread: 2 },
-  { id: 2, name: 'QC DRRMO Hotline', av: 'QD', avBg: '#DBEAFE', avColor: '#1D4ED8', preview: 'Your report has been acknowledged. Units are on the way.', time: '1h', unread: 0 },
-  { id: 3, name: 'Rosa Bautista', av: 'RB', avBg: '#EDE9FE', avColor: '#5B21B6', preview: 'I have the life vests ready at the evacuation center.', time: '2h', unread: 1 },
-  { id: 4, name: 'Noel Garcia', av: 'NG', avBg: '#FFF7ED', avColor: '#9A3412', preview: 'Let me know if you need more supplies tomorrow.', time: '5h', unread: 0 },
-  { id: 5, name: 'Batasan Hills Neighbors', av: 'BH', avBg: '#FEF3C7', avColor: '#92400E', preview: 'Maria: Thank you everyone for the support!', time: 'Yesterday', unread: 0 },
-  { id: 6, name: 'Ana Villanueva', av: 'AV', avBg: '#FDF2F8', avColor: '#9D174D', preview: 'Did you manage to find your dog?', time: 'Yesterday', unread: 0 },
-]
 
 export default function ChatList() {
   const navigate = useNavigate()
+  const { user, profile } = useAuth()
+  const [chats, setChats] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!user) return
+    const unsub = onValue(ref(db, 'chats'), snap => {
+      if (snap.exists()) {
+        const list = []
+        snap.forEach(child => {
+          const c = child.val()
+          if (c.participants && c.participants[user.uid]) {
+            list.push({ id: child.key, ...c })
+          }
+        })
+        list.sort((a, b) => (b.lastMessageAt || 0) - (a.lastMessageAt || 0))
+        setChats(list)
+      } else {
+        setChats([])
+      }
+      setLoading(false)
+    })
+    return unsub
+  }, [user])
+
+  const startAdminChat = async () => {
+    const existingAdminChat = chats.find(c => c.isAdminChat)
+    if (existingAdminChat) { navigate(`/chat/${existingAdminChat.id}`); return }
+    const chatData = {
+      participants: { [user.uid]: true },
+      lastMessage: '',
+      lastMessageAt: Date.now(),
+      type: 'group',
+      name: 'QCHelp Support',
+      isAdminChat: true,
+      createdAt: Date.now(),
+    }
+    const newRef = await push(ref(db, 'chats'), chatData)
+    navigate(`/chat/${newRef.key}`)
+  }
+
+  const displayName = profile?.displayName || user?.displayName || 'User'
+
   return (
     <div className="shell">
       <div className="inner-nav">
-        <button className="back-btn" onClick={() => navigate('/home')}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-        <h2 className="inner-title">Messages</h2>
-        <button className="icon-btn"><Edit size={20} /></button>
-      </div>
-
-      <div style={{ padding: '10px 16px 6px' }}>
-        <div className="search-bar">
-          <Search size={16} />
-          <input type="search" placeholder="Search conversations..." />
+        <div className="logo-row">
+          <span className="inner-title">Messages</span>
+        </div>
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button className="icon-btn"><Search size={20} /></button>
+          <button className="icon-btn" onClick={startAdminChat}><Edit size={20} /></button>
         </div>
       </div>
 
       <div className="screen-body" style={{ paddingBottom: 80 }}>
-        <div className="chat-list">
-          {CHATS.map(c => (
-            <div key={c.id} className={`chat-item ${c.unread > 0 ? 'unread' : ''}`} onClick={() => navigate(`/chat/${c.id}`)}>
-              <div style={{ width: 46, height: 46, borderRadius: '50%', background: c.avBg, color: c.avColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 15, flexShrink: 0 }}>{c.av}</div>
-              <div className="chat-info">
-                <div className="chat-row">
-                  <span className="chat-name">{c.name}</span>
-                  <span className="chat-time">{c.time}</span>
-                </div>
-                <div className="chat-row">
-                  <p className="chat-preview">{c.preview}</p>
-                  {c.unread > 0 && <span className="unread-badge">{c.unread}</span>}
-                </div>
-              </div>
+        <div style={{ padding: '10px 14px' }}>
+          <button
+            className="dash-q-btn blue"
+            style={{ width: '100%', justifyContent: 'flex-start', marginBottom: 8 }}
+            onClick={startAdminChat}
+          >
+            <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#DBEAFE', color: '#1D4ED8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Shield size={16} />
             </div>
-          ))}
+            <div>
+              <div className="dq-label">QCHelp Support</div>
+              <div className="dq-sub">Chat with our admin team</div>
+            </div>
+          </button>
         </div>
+
+        {loading ? (
+          <div className="empty-state"><Loader size={32} className="spin" /><p>Loading messages…</p></div>
+        ) : chats.length === 0 ? (
+          <div className="empty-state" style={{ paddingTop: 48 }}>
+            <MessageCircle size={48} />
+            <p style={{ fontWeight: 600, color: 'var(--text-2)', marginTop: 12 }}>No conversations yet</p>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', marginTop: 4, textAlign: 'center' }}>Start a conversation with QCHelp Support or connect with other residents.</p>
+          </div>
+        ) : (
+          <div className="chat-list">
+            {chats.map(chat => {
+              const chatName = chat.name || chat.otherUserName || 'Chat'
+              const av = avatarColor(chat.id)
+              const unread = chat.unreadCount?.[user.uid] || 0
+              return (
+                <div key={chat.id} className={`chat-item ${unread > 0 ? 'unread' : ''}`} onClick={() => navigate(`/chat/${chat.id}`)}>
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
+                    <div style={{ width: 46, height: 46, borderRadius: '50%', background: chat.isAdminChat ? '#DBEAFE' : av.bg, color: chat.isAdminChat ? '#1D4ED8' : av.text, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16 }}>
+                      {chat.isAdminChat ? <Shield size={20} /> : initials(chatName)}
+                    </div>
+                    {chat.online && <div style={{ position: 'absolute', bottom: 2, right: 2, width: 10, height: 10, borderRadius: '50%', background: 'var(--green)', border: '2px solid var(--surface)' }} />}
+                  </div>
+                  <div className="chat-info">
+                    <div className="chat-row">
+                      <span className="chat-name">{chatName}</span>
+                      <span className="chat-time">{timeAgo(chat.lastMessageAt)}</span>
+                    </div>
+                    <div className="chat-row" style={{ marginTop: 2 }}>
+                      {chat.isAdminChat && <span className="admin-badge-chat"><Shield size={10} /> Official</span>}
+                      <span className="chat-preview">{chat.lastMessage || 'No messages yet'}</span>
+                      {unread > 0 && <span className="unread-badge">{unread}</span>}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
+
       <BottomNav />
     </div>
   )

@@ -1,84 +1,88 @@
 # QCHelp — Quezon City Community Platform
 
 ## Overview
-A Vite + React community support platform for Quezon City residents. Covers emergency alerts, incident reporting, community feed, live map, messaging, and admin tools. Fully Firebase-ready with labeled data fields throughout the UI.
+A Vite + React community support platform for Quezon City residents. Covers emergency alerts, incident reporting, community feed, live map, messaging, activity feed, user profiles, and admin/dashboard tools. Fully wired to Firebase Realtime Database and Firebase Auth — all mock/fake data removed.
 
-## Architecture
+## Tech Stack
+- **Frontend**: React 18 + Vite + React Router v6
+- **Backend/DB**: Firebase Realtime Database (Asia Southeast 1)
+- **Auth**: Firebase Authentication (email/password, Google, Facebook)
+- **Storage**: Firebase Storage (for post media uploads)
+- **Icons**: lucide-react (line-style only — NO emojis anywhere)
+- **Fonts**: Inter (Google Fonts)
 
-### Tech Stack
-- **Framework**: Vite + React 18
-- **Router**: react-router-dom v6
-- **Icons**: lucide-react (line-style only — NO emojis)
-- **Styling**: Custom CSS (src/index.css) — Inter font, pastel design system
-- **Firebase**: Config ready in src/firebase.js (needs `npm install firebase` to activate)
-- **Map**: OpenStreetMap via iframe embed
-
-### Design System
-- `--primary`: #2563EB (blue)
-- `--radius`: 16px
-- `--bg`: #F1F5F9 (light slate)
-- `--surface`: #FFFFFF
-- Mobile shell: max-width 430px, centered
-- Desktop dashboard: full-width flex layout, 240px sticky sidebar
-
-## Screens (14 total)
-
-### Auth (4)
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/` | WelcomePage | Logo, landmarks, feature chips, sign-in/up/guest CTA |
-| `/signin` | SignIn | Email/password + Google + Facebook sign-in |
-| `/signup` | SignUp | Email/password + social + password strength meter |
-| `/reset` | ResetPassword | Email-based reset with Firebase |
-
-### Mobile (8)
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/home` | Home | Alert carousel, quick actions, QC announcements, community feed |
-| `/post/create` | PostCreate | Category selector, media upload, barangay picker, priority |
-| `/post/:id` | PostDetail | Full post, reactions, official badge, comments, related posts |
-| `/map` | MapPage | OpenStreetMap iframe, legend filters, incident list |
-| `/chat` | ChatList | Conversation list with admin badge and unread counts |
-| `/chat/:id` | ChatUI | Chat bubbles, timestamps, official messages |
-| `/activity` | ActivityPage | Tabbed (All/Mentions/Reactions/System), unread indicators |
-| `/profile` | ProfilePage | Avatar, stat cards, verified/admin badges, settings menu |
-
-### Desktop (2)
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/dashboard` | MainDashboard | Sidebar nav, 4 KPI widgets, bar chart, category breakdown, barangay table |
-| `/admin` | AdminPanel | Posts table, users table, analytics charts, FCM alert form |
+## Firebase Project
+- Project ID: `qc-help-support`
+- Database URL: `qc-help-support-default-rtdb.asia-southeast1.firebasedatabase.app`
+- Region: Asia Southeast 1
+- Credentials stored as Replit shared environment variables (VITE_FIREBASE_*)
 
 ## Key Files
-- `src/App.jsx` — All 14 routes
-- `src/index.css` — Complete design system (mobile + desktop)
-- `src/firebase.js` — Firebase config + full DB schema documentation
-- `src/constants/barangays.js` — QC_BARANGAYS (142), SAMPLE_POSTS, ANNOUNCEMENTS, MAP_MARKERS, ADMIN_POSTS_TABLE, ADMIN_USERS_TABLE, BARANGAY_STATS
-- `src/components/BottomNav.jsx` — Mobile bottom navigation with FAB
-- `src/components/SideMenu.jsx` — Slide-out menu (13 items)
-- `src/components/PostCard.jsx` — Reusable post card
-
-## Firebase Data Structure (from firebase.js)
 ```
-/users/{uid}          — name, barangay, role, verified, signInMethod
-/posts/{postId}       — authorId, barangay, category, content, status, priority, mediaUrls[]
-/comments/{postId}    — authorId, text, likes, role
-/chats/{chatId}       — participants[], lastMessage
-/alerts/{alertId}     — title, message, targetBarangay, category, expiresAt
-/announcements/{id}   — source, title, body, type
+src/
+  firebase.js             — Firebase app init (auth, db, storage, messaging)
+  contexts/
+    AuthContext.jsx       — Firebase Auth state, signIn/signUp/social/reset/signOut
+  utils/
+    format.js             — timeAgo(), initials(), avatarColor()
+  constants/
+    barangays.js          — QC_BARANGAYS list + CATEGORIES (static data only, no mock posts)
+  pages/
+    WelcomePage.jsx       — Landing page (public)
+    SignIn.jsx            — Firebase email + Google + Facebook sign-in
+    SignUp.jsx            — Firebase sign-up → writes /users/{uid}
+    ResetPassword.jsx     — Firebase sendPasswordResetEmail
+    Home.jsx              — Real-time posts (onValue /posts) + alerts carousel (/alerts)
+    PostCreate.jsx        — push to /posts, upload to Storage
+    PostDetail.jsx        — onValue /posts/{id}, comments, like/save via runTransaction
+    ChatList.jsx          — onValue /chats filtered by participant uid
+    ChatUI.jsx            — onValue /chats/{id}/messages, push messages
+    ActivityPage.jsx      — onValue /activity/{uid}, mark read
+    ProfilePage.jsx       — Reads /users/{uid} profile, sign-out
+    AdminPanel.jsx        — Manages /posts, /users, /alerts; 4 tabs
+    MainDashboard.jsx     — Desktop dashboard with live stats from Firebase
+    MapPage.jsx           — OpenStreetMap iframe (static incidents for now)
+  components/
+    PostCard.jsx          — Like toggle via runTransaction, click → PostDetail
+    BottomNav.jsx         — 5-item nav with FAB for PostCreate
+    SideMenu.jsx          — Slide-in drawer with full navigation + sign-out
 ```
 
-## Realistic QC Content
-- 142 actual barangay names
-- PAGASA/AGASA weather advisories
-- QCDRRMO emergency contacts (8924-0655)
-- QC LGU programs (Iskolar ng QC)
-- Real landmarks: Quezon Memorial Circle, Batasang Pambansa, UP Diliman
-- QC General Hospital, Seminary Road
-- Barangay courts, evacuation centers
+## Firebase DB Structure
+```
+/users/{uid}            — displayName, email, barangay, role, verified, joinedAt, reputation, postCount, helpedCount
+/posts/{postId}         — authorId, content, category, barangay, priority, status, mediaUrls, likeCount, commentCount, createdAt
+/posts/{postId}/likes/{uid}      — boolean
+/posts/{postId}/comments/{id}    — authorId, authorName, text, createdAt, role
+/chats/{chatId}         — participants, lastMessage, lastMessageAt, isAdminChat
+/chats/{chatId}/messages/{id}    — senderId, senderName, text, sentAt, readBy
+/activity/{uid}/{id}    — type, text, postId, createdAt, read
+/alerts/{alertId}       — title, message, targetBarangay, category, expiresAt, createdAt
+```
 
-## Dev Notes
-- Firebase packages not yet installed — run `npm install firebase` when ready to activate
-- No emojis anywhere — all icons are lucide-react line-style
-- All Firebase field names are labeled in the UI for developer reference
-- Social login buttons use inline SVG logos (Google, Facebook)
+## Design System
+- Background: cream `#F1F5F9` + pastel gradient body
+- Surface: `#FFFFFF`
+- Primary: `#2563EB` (blue)
+- Border radius: `--radius: 16px`
+- Mobile shell max-width: 430px
+- Desktop sidebar: 240px sticky (collapsible)
+- NO emojis — lucide-react line icons only
+- `.spin` keyframe class for loading spinners (`<Loader className="spin" />`)
+- `.error-banner` for auth error messages
+- `.spinner` for full-page loading (used in AuthContext)
+
+## Auth Flow
+1. Unauthenticated users land on WelcomePage (`/`)
+2. SignIn/SignUp/ResetPassword at `/signin`, `/signup`, `/reset` — all PublicRoutes (redirect to /home if already signed in)
+3. All other routes (`/home`, `/post/*`, `/chat/*`, `/activity`, `/profile`, `/admin`, `/dashboard`) are PrivateRoutes — redirect to `/signin` if unauthenticated
+4. AuthContext shows a full-page spinner while Firebase resolves auth state
+
+## Roles
+- `resident` — default for new sign-ups
+- `admin` / `superadmin` — sees Admin Panel and Dashboard links in Profile + SideMenu
+- `deactivated` — blocked users (set by admin)
+
+## Environment Variables (Replit Shared Secrets)
+All prefixed with `VITE_FIREBASE_`:
+- `API_KEY`, `AUTH_DOMAIN`, `DATABASE_URL`, `PROJECT_ID`, `STORAGE_BUCKET`, `MESSAGING_SENDER_ID`, `APP_ID`, `MEASUREMENT_ID`
