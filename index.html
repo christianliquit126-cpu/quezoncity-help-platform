@@ -3,888 +3,1187 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<meta name="theme-color" content="#1B4332"/>
-<meta name="description" content="QC Help Support — Quezon City Community Help Network"/>
-<title>QC Help Support</title>
+<meta name="theme-color" content="#f0f4ff"/>
+<meta name="description" content="QCHelp – Quezon City Community Support Hub"/>
+<title>QCHelp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <link rel="stylesheet" href="style.css"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:wght@700;900&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 </head>
 <body>
 
-<!-- ═══════════ SPLASH ═══════════ -->
-<div id="splash" role="status" aria-label="Loading QC Help Support">
-  <div class="splash-inner">
-    <div class="splash-rings"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div></div>
-    <div class="splash-logo"><div class="splash-icon-wrap" aria-hidden="true">
-        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="4" y="20" width="6" height="12" rx="1" fill="white" opacity=".9"/>
-          <rect x="6" y="14" width="2" height="6" fill="white"/>
-          <rect x="11" y="16" width="8" height="16" rx="1" fill="white" opacity=".9"/>
-          <rect x="13" y="10" width="4" height="6" fill="white"/>
-          <rect x="20" y="18" width="7" height="14" rx="1" fill="white" opacity=".9"/>
-          <rect x="22" y="12" width="3" height="6" fill="white"/>
-          <rect x="28" y="22" width="4" height="10" rx="1" fill="white" opacity=".9"/>
-          <rect x="2" y="32" width="32" height="2" rx="1" fill="white" opacity=".5"/>
-        </svg>
-      </div><h1>QC Help<br/><span>Support</span></h1></div>
-    <p class="splash-sub">Quezon City Community Network</p>
-    <div class="splash-progress" role="progressbar"><div class="splash-bar"></div></div>
-    <p class="splash-version">v7.0 · Quezon City</p>
-  </div>
-</div>
+<!-- ═══════════ APP WRAPPER ═══════════ -->
+<div id="app">
 
-<!-- ═══════════ AUTH ═══════════ -->
-<div id="authWrap" class="hidden" role="main">
-  <div class="auth-scene">
-    <canvas id="authCanvas" aria-hidden="true"></canvas>
-    <div class="auth-gradient" aria-hidden="true"></div>
-    <div class="float-icons" aria-hidden="true">
-      <div class="fi-shape fi1"></div><div class="fi-shape fi2"></div>
-      <div class="fi-shape fi3"></div><div class="fi-shape fi4"></div>
-      <div class="fi-shape fi5"></div><div class="fi-shape fi6"></div>
-      <div class="fi-shape fi7"></div><div class="fi-shape fi8"></div>
+  <!-- ═══════════ WELCOME SCREEN ═══════════ -->
+  <div id="screen-welcome" class="screen active">
+    <div class="welcome-bg">
+      <div class="welcome-blob blob-1"></div>
+      <div class="welcome-blob blob-2"></div>
+      <div class="welcome-blob blob-3"></div>
     </div>
-    <div class="auth-brand-bg">
-      <div class="auth-brand-icon">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <rect x="1" y="9" width="3" height="6" rx=".5" fill="white" opacity=".9"/>
-          <rect x="5" y="7" width="4" height="8" rx=".5" fill="white" opacity=".9"/>
-          <rect x="10" y="8" width="3" height="7" rx=".5" fill="white" opacity=".9"/>
-          <rect x="0" y="15" width="16" height="1" rx=".5" fill="white" opacity=".4"/>
-        </svg>
-      </div>
-      <span>QC Help Support</span>
-    </div>
-  </div>
-  <div class="auth-panel" id="authPanel">
-    <div class="auth-tabs" id="authTabs" role="tablist">
-      <button class="atab-btn active" id="tabLogin" onclick="sw('login')" role="tab" aria-selected="true">Sign In</button>
-      <button class="atab-btn" id="tabRegister" onclick="sw('register')" role="tab" aria-selected="false">Sign Up</button>
-      <div class="atab-slider" id="atabSlider" aria-hidden="true"></div>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="auth-form" id="screenLogin" role="tabpanel">
-      <div class="auth-welcome"><h2>Mabuhay!</h2><p>Sign in to your QC Help account</p></div>
-      <div class="fg">
-        <div class="iw2"><i class="fas fa-envelope" aria-hidden="true"></i>
-          <input type="email" id="liEmail" placeholder="Email address" autocomplete="email" inputmode="email" maxlength="100"/>
+    <div class="welcome-content">
+      <div class="welcome-logo">
+        <div class="logo-icon">
+          <i data-lucide="map-pin"></i>
         </div>
-        <div class="field-err hidden" id="liEmailErr"></div>
+        <span class="logo-text">QCHelp</span>
       </div>
-      <div class="fg">
-        <div class="iw2"><i class="fas fa-lock" aria-hidden="true"></i>
-          <input type="password" id="liPass" placeholder="Password" autocomplete="current-password" maxlength="128"/>
-          <button class="tpw" onclick="tpw('liPass',this)" type="button" aria-label="Show password"><i class="fas fa-eye"></i></button>
-        </div>
-        <div class="field-err hidden" id="liPassErr"></div>
+      <div class="welcome-hero">
+        <h1 class="welcome-title">Quezon City's Community Support Hub</h1>
+        <p class="welcome-subtitle">Connect with neighbors, report incidents, request help, and stay informed in real time across all barangays.</p>
       </div>
-      <button class="link-btn right-align" onclick="sw('forgot')" type="button">Forgot password?</button>
-      <button class="btn-auth2" id="liBtn" onclick="doLogin()" type="button">
-        <span>Sign In</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
-      </button>
-      <div class="auth-or"><span>or</span></div>
-      <button class="btn-auth2 ghost" onclick="sw('register')" type="button">Create New Account</button>
-    </div>
-
-    <!-- REGISTER -->
-    <div class="auth-form hidden" id="screenRegister" role="tabpanel">
-      <div class="auth-welcome"><h2>Join QC Help</h2><p>Create your community account</p></div>
-      <div class="fg2col">
-        <div class="fg">
-          <div class="iw2"><i class="fas fa-user" aria-hidden="true"></i>
-            <input type="text" id="rgName" placeholder="Full name" autocomplete="name" maxlength="60"/>
-          </div>
-          <div class="field-err hidden" id="rgNameErr"></div>
+      <div class="welcome-features">
+        <div class="feature-chip">
+          <i data-lucide="shield-check"></i>
+          <span>Emergency Alerts</span>
         </div>
-        <div class="fg">
-          <div class="iw2"><i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-            <input type="text" id="rgBrgy" placeholder="Barangay" maxlength="80"/>
-          </div>
-          <div class="field-err hidden" id="rgBrgyErr"></div>
+        <div class="feature-chip">
+          <i data-lucide="users"></i>
+          <span>Community Feed</span>
+        </div>
+        <div class="feature-chip">
+          <i data-lucide="map"></i>
+          <span>Live Map</span>
         </div>
       </div>
-      <div class="fg">
-        <div class="iw2"><i class="fas fa-envelope" aria-hidden="true"></i>
-          <input type="email" id="rgEmail" placeholder="Email address" autocomplete="email" inputmode="email" maxlength="100"/>
-        </div>
-        <div class="field-err hidden" id="rgEmailErr"></div>
+      <div class="welcome-actions">
+        <button class="btn btn-primary btn-full" onclick="showScreen('signin')">
+          <i data-lucide="log-in"></i>
+          Sign In
+        </button>
+        <button class="btn btn-outline btn-full" onclick="showScreen('signup')">
+          <i data-lucide="user-plus"></i>
+          Create Account
+        </button>
+        <button class="btn btn-ghost btn-full" onclick="showScreen('home')">
+          Continue as Guest
+        </button>
       </div>
-      <div class="fg2col">
-        <div class="fg">
-          <div class="iw2"><i class="fas fa-lock" aria-hidden="true"></i>
-            <input type="password" id="rgPass" placeholder="Password (min 6)" maxlength="128" oninput="updatePwStrength(this.value)"/>
-            <button class="tpw" onclick="tpw('rgPass',this)" type="button" aria-label="Show password"><i class="fas fa-eye"></i></button>
-          </div>
-          <div class="pw-strength-wrap" id="pwStrengthWrap"><div class="pw-strength-bar"><div class="pw-strength-fill" id="pwStrengthFill"></div></div><div class="pw-strength-label" id="pwStrengthLabel"></div></div>
-          <div class="field-err hidden" id="rgPassErr"></div>
-        </div>
-        <div class="fg">
-          <div class="iw2"><i class="fas fa-lock" aria-hidden="true"></i>
-            <input type="password" id="rgPass2" placeholder="Confirm password" maxlength="128"/>
-          </div>
-          <div class="field-err hidden" id="rgPass2Err"></div>
-        </div>
-      </div>
-      <div class="fg">
-        <div class="iw2"><i class="fas fa-id-badge" aria-hidden="true"></i>
-          <select id="rgRole"><option value="resident">Resident</option><option value="nonresident">Non-Resident</option></select>
-        </div>
-      </div>
-      <button class="btn-auth2" id="rgBtn" onclick="doRegister()" type="button">
-        <span>Create Account</span><i class="fas fa-arrow-right" aria-hidden="true"></i>
-      </button>
-      <div class="auth-or"><span>or</span></div>
-      <button class="btn-auth2 ghost" onclick="sw('login')" type="button">Already have an account</button>
-    </div>
-
-    <!-- VERIFY -->
-    <div class="auth-form hidden" id="screenVerify">
-      <div class="verify-big-anim">
-        <div class="verify-icon-design">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-          <rect x="4" y="8" width="32" height="24" rx="3" stroke="currentColor" stroke-width="2" fill="none"/>
-          <path d="M4 11l16 11 16-11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="30" cy="30" r="8" fill="var(--gpale)" stroke="var(--green)" stroke-width="2"/>
-          <path d="M27 30l2 2 4-4" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-        <div class="verify-rings"><div class="vr vr1"></div><div class="vr vr2"></div></div>
-      </div>
-      <div class="auth-welcome" style="text-align:center">
-        <h2>Check Your Email</h2>
-        <p id="verifyTxt">We sent a verification link. Click it then tap Continue.</p>
-      </div>
-      <button class="btn-auth2" id="verifyCheckBtn" onclick="checkVerified()" type="button">
-        <i class="fas fa-check-circle" aria-hidden="true"></i><span>I've Verified — Continue</span>
-      </button>
-      <button class="link-btn" id="resendBtn" onclick="resendVerify()" style="margin-top:8px" type="button">Resend verification email</button>
-      <button class="link-btn" onclick="sw('login')" style="color:var(--soft)" type="button">Back to Login</button>
-    </div>
-
-    <!-- FORGOT -->
-    <div class="auth-form hidden" id="screenForgot">
-      <button class="back-btn" onclick="sw('login')" type="button"><i class="fas fa-arrow-left"></i> Back to Login</button>
-      <div class="auth-welcome"><h2>Reset Password</h2><p>We'll send a reset link to your email</p></div>
-      <div class="fg">
-        <div class="iw2"><i class="fas fa-envelope" aria-hidden="true"></i>
-          <input type="email" id="fpEmail" placeholder="Your email address" inputmode="email" maxlength="100"/>
-        </div>
-      </div>
-      <button class="btn-auth2" id="fpBtn" onclick="doForgot()" type="button">
-        <span>Send Reset Link</span><i class="fas fa-paper-plane" aria-hidden="true"></i>
-      </button>
-      <div class="success-msg hidden" id="fpSuccess"><i class="fas fa-check-circle"></i> Reset link sent! Check your email.</div>
     </div>
   </div>
-</div>
 
-<!-- ═══════════ MAIN APP ═══════════ -->
-<div id="mainApp" class="hidden">
-
-  <!-- TOPNAV -->
-  <header class="topnav" role="banner">
-    <div class="tn-l">
-      <button class="tn-menu" onclick="toggleDrawer()" aria-label="Open menu" type="button"><i class="fas fa-bars"></i></button>
-      <div class="tn-brand" onclick="goTab('home')" role="button" tabindex="0">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-          <rect x="1" y="9" width="4" height="8" rx=".5" fill="currentColor" opacity=".8"/>
-          <rect x="6" y="6" width="5" height="11" rx=".5" fill="currentColor"/>
-          <rect x="12" y="8" width="4" height="9" rx=".5" fill="currentColor" opacity=".8"/>
-          <rect x="0" y="17" width="18" height="1" rx=".5" fill="currentColor" opacity=".3"/>
-        </svg>
-        <span class="tn-name">QC Help</span>
+  <!-- ═══════════ SIGN IN SCREEN ═══════════ -->
+  <div id="screen-signin" class="screen">
+    <div class="auth-page">
+      <div class="auth-header">
+        <button class="btn-back" onclick="showScreen('welcome')">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <div class="auth-logo">
+          <div class="logo-icon small">
+            <i data-lucide="map-pin"></i>
+          </div>
+          <span class="logo-text">QCHelp</span>
+        </div>
+      </div>
+      <div class="auth-body">
+        <div class="auth-title-group">
+          <h2 class="auth-title">Welcome back</h2>
+          <p class="auth-subtitle">Sign in to your QCHelp account</p>
+        </div>
+        <form class="auth-form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="signin-email">Email Address</label>
+            <div class="input-wrap">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input type="email" id="signin-email" name="email" placeholder="you@example.com" autocomplete="email"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <div class="input-wrap">
+              <i data-lucide="lock" class="input-icon"></i>
+              <input type="password" id="signin-password" name="password" placeholder="Enter your password" autocomplete="current-password"/>
+              <button type="button" class="input-toggle" onclick="togglePassword('signin-password', this)">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="checkbox-label">
+              <input type="checkbox" name="rememberMe"/>
+              <span class="checkbox-custom"></span>
+              Remember me
+            </label>
+            <button type="button" class="link-btn" onclick="showScreen('reset')">Forgot password?</button>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" onclick="showScreen('home')">
+            <i data-lucide="log-in"></i>
+            Sign In
+          </button>
+        </form>
+        <div class="auth-divider"><span>or continue with</span></div>
+        <div class="social-btns">
+          <button class="btn btn-social">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Google
+          </button>
+          <button class="btn btn-social">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </button>
+        </div>
+        <p class="auth-switch">Don't have an account? <button class="link-btn" onclick="showScreen('signup')">Sign Up</button></p>
       </div>
     </div>
-    <div class="tn-search" role="search">
-      <i class="fas fa-search" aria-hidden="true"></i>
-      <input type="search" id="searchBox" placeholder="Search posts…" oninput="onSearch()" aria-label="Search posts" maxlength="100"/>
-      <button class="s-clear hidden" id="sClear" onclick="clearSearch()" type="button" aria-label="Clear search"><i class="fas fa-times"></i></button>
+  </div>
+
+  <!-- ═══════════ SIGN UP SCREEN ═══════════ -->
+  <div id="screen-signup" class="screen">
+    <div class="auth-page">
+      <div class="auth-header">
+        <button class="btn-back" onclick="showScreen('welcome')">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <div class="auth-logo">
+          <div class="logo-icon small">
+            <i data-lucide="map-pin"></i>
+          </div>
+          <span class="logo-text">QCHelp</span>
+        </div>
+      </div>
+      <div class="auth-body">
+        <div class="auth-title-group">
+          <h2 class="auth-title">Join QCHelp</h2>
+          <p class="auth-subtitle">Create your community account</p>
+        </div>
+        <form class="auth-form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <div class="input-wrap">
+              <i data-lucide="user" class="input-icon"></i>
+              <input type="text" id="signup-name" name="fullName" placeholder="Juan dela Cruz" autocomplete="name"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email Address</label>
+            <div class="input-wrap">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input type="email" id="signup-email" name="email" placeholder="you@example.com" autocomplete="email"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-phone">Contact Number</label>
+            <div class="input-wrap">
+              <i data-lucide="phone" class="input-icon"></i>
+              <input type="tel" id="signup-phone" name="contactNumber" placeholder="+63 9XX XXX XXXX" autocomplete="tel"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-barangay">Barangay</label>
+            <div class="input-wrap">
+              <i data-lucide="map-pin" class="input-icon"></i>
+              <select id="signup-barangay" name="barangay">
+                <option value="">Select your barangay</option>
+                <option>Alicia</option><option>Amihan</option><option>Apolonio Samson</option>
+                <option>Aurora</option><option>Bagbag</option><option>Bagong Bayan</option>
+                <option>Bagong Pag-asa</option><option>Bagong Silangan</option><option>Bagong Silang</option>
+                <option>Bagumbayan</option><option>Bagumbuhay</option><option>Bahay Toro</option>
+                <option>Balingasa</option><option>Batasan Hills</option><option>Batis</option>
+                <option>Blue Ridge A</option><option>Blue Ridge B</option><option>Botocan</option>
+                <option>Camp Aguinaldo</option><option>Capri</option><option>Central</option>
+                <option>Commonwealth</option><option>Culiat</option><option>Damar</option>
+                <option>Damayan</option><option>Damayan Lagi</option><option>Del Monte</option>
+                <option>Dioquino Zobel</option><option>Don Manuel</option><option>Dona Aurora</option>
+                <option>Dona Imelda</option><option>Dona Josefa</option><option>Escopa I</option>
+                <option>Escopa II</option><option>Escopa III</option><option>Escopa IV</option>
+                <option>Fairview</option><option>Filinvest II</option><option>G.S.I.S.</option>
+                <option>Gulod</option><option>Holy Spirit</option><option>Horseshoe</option>
+                <option>Immaculate Concepcion</option><option>Kaligayahan</option><option>Kalusugan</option>
+                <option>Kamuning</option><option>Katipunan</option><option>Kaunlaran</option>
+                <option>Kristong Hari</option><option>Krus na Ligas</option><option>Laging Handa</option>
+                <option>Libis</option><option>Lourdes</option><option>Loyola Heights</option>
+                <option>Lucban</option><option>Luzon</option><option>Maharlika</option>
+                <option>Malaya</option><option>Mangga</option><option>Manresa</option>
+                <option>Mariana</option><option>Mariblo</option><option>Marilag</option>
+                <option>Masagana</option><option>Masambong</option><option>Matandang Balara</option>
+                <option>Milagrosa</option><option>Nagkaisang Nayon</option><option>Nayon ng Bulaklak</option>
+                <option>New Era</option><option>New Fairview</option><option>Novaliches</option>
+                <option>Obrero</option><option>Old Capitol Site</option><option>Paang Bundok</option>
+                <option>Pag-ibig sa Nayon</option><option>Pansol</option><option>Paraiso</option>
+                <option>Pasong Putik</option><option>Payatas</option><option>Phil-Am</option>
+                <option>Pinagkaisahan</option><option>Project 6</option><option>Project 7</option>
+                <option>Project 8</option><option>Provident Village</option><option>Quirino 2-A</option>
+                <option>Quirino 2-B</option><option>Quirino 2-C</option><option>Quirino 3-A</option>
+                <option>Ramon Magsaysay</option><option>Sacred Heart</option><option>Saint Ignatius</option>
+                <option>Saint Peter</option><option>Salvacion</option><option>San Agustin</option>
+                <option>San Antonio</option><option>San Bartolome</option><option>San Isidro</option>
+                <option>San Isidro Labrador</option><option>San Jose</option><option>San Roque</option>
+                <option>Sangandaan</option><option>Santa Cruz</option><option>Santa Lucia</option>
+                <option>Santa Monica</option><option>Santo Cristo</option><option>Santo Domingo</option>
+                <option>Santo Nino</option><option>Santol</option><option>Sauyo</option>
+                <option>Siena</option><option>Sikatuna Village</option><option>Socorro</option>
+                <option>South Triangle</option><option>Tagumpay</option><option>Talayan</option>
+                <option>Tandang Sora</option><option>Tatalon</option><option>Teachers Village East</option>
+                <option>Teachers Village West</option><option>Ugong Norte</option><option>U.P. Campus</option>
+                <option>U.P. Village</option><option>Vasra</option><option>Veterans Village</option>
+                <option>Villa Maria Clara</option><option>West Triangle</option><option>White Plains</option>
+              </select>
+              <i data-lucide="chevron-down" class="input-icon right"></i>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <div class="input-wrap">
+              <i data-lucide="lock" class="input-icon"></i>
+              <input type="password" id="signup-password" name="password" placeholder="Create a password" oninput="checkStrength(this.value)" autocomplete="new-password"/>
+              <button type="button" class="input-toggle" onclick="togglePassword('signup-password', this)">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <div class="strength-bar">
+              <div id="strength-fill" class="strength-fill"></div>
+            </div>
+            <span id="strength-label" class="strength-label"></span>
+          </div>
+          <div class="form-group">
+            <label for="signup-confirm">Confirm Password</label>
+            <div class="input-wrap">
+              <i data-lucide="lock" class="input-icon"></i>
+              <input type="password" id="signup-confirm" name="confirmPassword" placeholder="Repeat your password" autocomplete="new-password"/>
+              <button type="button" class="input-toggle" onclick="togglePassword('signup-confirm', this)">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+          </div>
+          <label class="checkbox-label terms">
+            <input type="checkbox" name="agreeToTerms"/>
+            <span class="checkbox-custom"></span>
+            I agree to the <button type="button" class="link-btn">Terms of Service</button> and <button type="button" class="link-btn">Privacy Policy</button>
+          </label>
+          <button type="submit" class="btn btn-primary btn-full" onclick="showScreen('home')">
+            <i data-lucide="user-plus"></i>
+            Create Account
+          </button>
+        </form>
+        <p class="auth-switch">Already have an account? <button class="link-btn" onclick="showScreen('signin')">Sign In</button></p>
+      </div>
     </div>
-    <div class="tn-r">
-      <button class="tn-bell" id="tnBell" onclick="toggleNotifPanel()" aria-label="Notifications" type="button">
-        <i class="fas fa-bell"></i><span class="nbadge hidden" id="nBadge" aria-live="polite">0</span>
+  </div>
+
+  <!-- ═══════════ RESET SCREEN ═══════════ -->
+  <div id="screen-reset" class="screen">
+    <div class="auth-page">
+      <div class="auth-header">
+        <button class="btn-back" onclick="showScreen('signin')">
+          <i data-lucide="arrow-left"></i>
+        </button>
+      </div>
+      <div class="auth-body">
+        <div class="reset-icon-wrap">
+          <div class="reset-icon">
+            <i data-lucide="key-round"></i>
+          </div>
+        </div>
+        <div class="auth-title-group center">
+          <h2 class="auth-title">Forgot Password?</h2>
+          <p class="auth-subtitle">Enter your email and we'll send you instructions to reset your password.</p>
+        </div>
+        <form class="auth-form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="reset-email">Email Address</label>
+            <div class="input-wrap">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input type="email" id="reset-email" name="email" placeholder="you@example.com" autocomplete="email"/>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" onclick="showResetSuccess()">
+            <i data-lucide="send"></i>
+            Send Reset Link
+          </button>
+        </form>
+        <div id="reset-success" class="reset-success hidden">
+          <div class="success-box">
+            <i data-lucide="check-circle"></i>
+            <span>Reset link sent! Check your inbox.</span>
+          </div>
+        </div>
+        <p class="auth-switch"><button class="link-btn" onclick="showScreen('signin')">Back to Sign In</button></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ HOME SCREEN ═══════════ -->
+  <div id="screen-home" class="screen app-screen">
+    <div class="top-nav">
+      <div class="nav-left">
+        <button class="menu-btn" onclick="showScreen('menu')">
+          <i data-lucide="menu"></i>
+        </button>
+        <div class="nav-logo">
+          <div class="logo-icon tiny"><i data-lucide="map-pin"></i></div>
+          <span>QCHelp</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <button class="icon-btn" onclick="showScreen('home')">
+          <i data-lucide="search"></i>
+        </button>
+        <button class="icon-btn notif-btn" onclick="showScreen('activity')">
+          <i data-lucide="bell"></i>
+          <span class="badge">3</span>
+        </button>
+        <button class="avatar-btn" onclick="showScreen('profile')">
+          <img src="https://ui-avatars.com/api/?name=Juan+Cruz&background=dbeafe&color=1d4ed8&bold=true" alt="Profile"/>
+        </button>
+      </div>
+    </div>
+
+    <div class="screen-scroll">
+      <!-- Alerts Banner -->
+      <div class="alerts-section">
+        <div class="alert-card flood">
+          <div class="alert-icon"><i data-lucide="cloud-rain"></i></div>
+          <div class="alert-content">
+            <span class="alert-source">PAGASA Warning</span>
+            <p class="alert-text">Moderate to heavy rains expected over Quezon City. Low-lying barangays on alert.</p>
+          </div>
+          <div class="alert-time">2m ago</div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section-header">
+        <h3 class="section-title">Quick Actions</h3>
+      </div>
+      <div class="quick-actions">
+        <button class="action-tile blue" onclick="showScreen('post-create')">
+          <div class="action-tile-icon"><i data-lucide="plus-circle"></i></div>
+          <span>Post Help</span>
+        </button>
+        <button class="action-tile pink" onclick="showScreen('map')">
+          <div class="action-tile-icon"><i data-lucide="map-pin"></i></div>
+          <span>View Map</span>
+        </button>
+        <button class="action-tile purple" onclick="showScreen('chat')">
+          <div class="action-tile-icon"><i data-lucide="message-circle"></i></div>
+          <span>Messages</span>
+        </button>
+        <button class="action-tile green" onclick="showScreen('activity')">
+          <div class="action-tile-icon"><i data-lucide="activity"></i></div>
+          <span>Activity</span>
+        </button>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="section-header">
+        <h3 class="section-title">Community Feed</h3>
+        <button class="section-more">See all <i data-lucide="chevron-right"></i></button>
+      </div>
+      <div class="category-scroll">
+        <button class="cat-chip active" data-cat="all">All</button>
+        <button class="cat-chip" data-cat="flood">Flood</button>
+        <button class="cat-chip" data-cat="medical">Medical</button>
+        <button class="cat-chip" data-cat="traffic">Traffic</button>
+        <button class="cat-chip" data-cat="fire">Fire</button>
+        <button class="cat-chip" data-cat="lost">Lost &amp; Found</button>
+        <button class="cat-chip" data-cat="crime">Crime</button>
+        <button class="cat-chip" data-cat="info">Info</button>
+      </div>
+
+      <!-- Posts Feed -->
+      <div class="posts-feed" id="posts-feed">
+        <div class="post-card" onclick="showScreen('post-detail')">
+          <div class="post-header">
+            <img class="post-avatar" src="https://ui-avatars.com/api/?name=Maria+Santos&background=fce7f3&color=9d174d&bold=true" alt="Maria Santos"/>
+            <div class="post-meta">
+              <span class="post-author">Maria Santos</span>
+              <div class="post-location"><i data-lucide="map-pin"></i> Batasan Hills</div>
+            </div>
+            <div class="post-time">5m ago</div>
+          </div>
+          <div class="post-body">
+            <div class="post-tags">
+              <span class="tag flood">Flood</span>
+              <span class="tag urgent">Urgent</span>
+            </div>
+            <p class="post-text">Floodwater is rising rapidly along Batasan Road. Several families need immediate evacuation assistance. Water level is at knee height already.</p>
+          </div>
+          <div class="post-footer">
+            <button class="post-action"><i data-lucide="heart"></i> 24</button>
+            <button class="post-action"><i data-lucide="message-circle"></i> 8</button>
+            <button class="post-action"><i data-lucide="share-2"></i> Share</button>
+            <span class="post-status open">Open</span>
+          </div>
+        </div>
+
+        <div class="post-card" onclick="showScreen('post-detail')">
+          <div class="post-header">
+            <img class="post-avatar" src="https://ui-avatars.com/api/?name=Jose+Reyes&background=ecfdf5&color=065f46&bold=true" alt="Jose Reyes"/>
+            <div class="post-meta">
+              <span class="post-author">Jose Reyes</span>
+              <div class="post-location"><i data-lucide="map-pin"></i> Commonwealth</div>
+            </div>
+            <div class="post-time">18m ago</div>
+          </div>
+          <div class="post-body">
+            <div class="post-tags">
+              <span class="tag medical">Medical</span>
+            </div>
+            <p class="post-text">Looking for a voluntary blood donor with blood type O+ for an emergency operation at Quezon City General Hospital. Please contact immediately.</p>
+          </div>
+          <div class="post-footer">
+            <button class="post-action"><i data-lucide="heart"></i> 41</button>
+            <button class="post-action"><i data-lucide="message-circle"></i> 15</button>
+            <button class="post-action"><i data-lucide="share-2"></i> Share</button>
+            <span class="post-status open">Open</span>
+          </div>
+        </div>
+
+        <div class="post-card" onclick="showScreen('post-detail')">
+          <div class="post-header">
+            <img class="post-avatar" src="https://ui-avatars.com/api/?name=Ana+Villanueva&background=ede9fe&color=5b21b6&bold=true" alt="Ana Villanueva"/>
+            <div class="post-meta">
+              <span class="post-author">Ana Villanueva</span>
+              <div class="post-location"><i data-lucide="map-pin"></i> Fairview</div>
+            </div>
+            <div class="post-time">1h ago</div>
+          </div>
+          <div class="post-body">
+            <div class="post-tags">
+              <span class="tag lost">Lost &amp; Found</span>
+            </div>
+            <p class="post-text">Lost: Brown Labrador named "Kiko", wearing a red collar. Last seen near Fairview Park yesterday afternoon. Please call if found.</p>
+          </div>
+          <div class="post-footer">
+            <button class="post-action"><i data-lucide="heart"></i> 67</button>
+            <button class="post-action"><i data-lucide="message-circle"></i> 22</button>
+            <button class="post-action"><i data-lucide="share-2"></i> Share</button>
+            <span class="post-status resolved">Resolved</span>
+          </div>
+        </div>
+
+        <div class="post-card" onclick="showScreen('post-detail')">
+          <div class="post-header">
+            <img class="post-avatar" src="https://ui-avatars.com/api/?name=Carlos+Mendoza&background=fff7ed&color=9a3412&bold=true" alt="Carlos Mendoza"/>
+            <div class="post-meta">
+              <span class="post-author">Carlos Mendoza</span>
+              <div class="post-location"><i data-lucide="map-pin"></i> Cubao</div>
+            </div>
+            <div class="post-time">2h ago</div>
+          </div>
+          <div class="post-body">
+            <div class="post-tags">
+              <span class="tag traffic">Traffic</span>
+              <span class="tag info">Info</span>
+            </div>
+            <p class="post-text">Major road closure at EDSA-Cubao underpass due to ongoing rehabilitation works. Expect heavy traffic until 6PM. Suggest using alternate routes via Aurora Blvd.</p>
+          </div>
+          <div class="post-footer">
+            <button class="post-action"><i data-lucide="heart"></i> 132</button>
+            <button class="post-action"><i data-lucide="message-circle"></i> 47</button>
+            <button class="post-action"><i data-lucide="share-2"></i> Share</button>
+            <span class="post-status info">Info</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="setNav(this); showScreen('home')">
+        <i data-lucide="home"></i><span>Home</span>
       </button>
-      <div class="tn-av" id="tnAv" onclick="goTab('account')" role="button" tabindex="0" aria-label="My profile"></div>
-    </div>
-  </header>
-
-  <!-- DRAWER OVERLAY -->
-  <div class="d-overlay hidden" id="dOverlay" onclick="toggleDrawer()" aria-hidden="true"></div>
-
-  <!-- DRAWER -->
-  <aside class="drawer hidden" id="drawer" role="navigation" aria-label="Main navigation">
-    <div class="d-head">
-      <div class="d-av-wrap" onclick="goTab('account');toggleDrawer()" role="button" tabindex="0">
-        <div class="d-av" id="dAv"></div>
-        <div class="d-av-cam" aria-hidden="true"><i class="fas fa-camera"></i></div>
-      </div>
-      <div class="d-info">
-        <strong id="dName">—</strong>
-        <span id="dBrgy">—</span>
-        <div class="d-badges" id="dBadges"></div>
-      </div>
-    </div>
-    <div class="d-online"><span class="pdot" aria-hidden="true"></span><span id="dOnline">0 online now</span></div>
-    <nav class="d-nav">
-      <button onclick="goTab('home');toggleDrawer()" type="button"><i class="fas fa-home"></i>Home Feed</button>
-      <button onclick="goTab('mapview');toggleDrawer()" type="button"><i class="fas fa-map"></i>Map View</button>
-      <button onclick="goTab('lostfound');toggleDrawer()" type="button"><i class="fas fa-search-location"></i>Lost &amp; Found</button>
-      <button onclick="goTab('report');toggleDrawer()" type="button"><i class="fas fa-flag"></i>Report Issue</button>
-      <button onclick="goTab('saved');toggleDrawer()" type="button"><i class="fas fa-bookmark"></i>Saved Posts</button>
-      <button onclick="goTab('activity');toggleDrawer()" type="button"><i class="fas fa-bell"></i>Activity Feed</button>
-      <button onclick="goTab('weather');toggleDrawer()" type="button"><i class="fas fa-cloud-sun"></i>Weather</button>
-      <button onclick="goTab('bulletin');toggleDrawer()" type="button"><i class="fas fa-bullhorn"></i>Announcements</button>
-      <button onclick="goTab('nearby');toggleDrawer()" type="button"><i class="fas fa-map-marker-alt"></i>Nearby</button>
-      <button onclick="goTab('services');toggleDrawer()" type="button"><i class="fas fa-landmark"></i>Gov't Services</button>
-      <button onclick="goTab('emergency');toggleDrawer()" type="button"><i class="fas fa-ambulance"></i>Emergency</button>
-      <button onclick="goTab('guidelines');toggleDrawer()" type="button"><i class="fas fa-book-open"></i>Guidelines</button>
-      <button onclick="goTab('about');toggleDrawer()" type="button"><i class="fas fa-info-circle"></i>About</button>
-      <button id="adminNavBtn" class="hidden" onclick="goTab('admin');toggleDrawer()" type="button"><i class="fas fa-shield-alt"></i>Admin Dashboard</button>
-      <button onclick="goTab('settings');toggleDrawer()" type="button"><i class="fas fa-cog"></i>Settings</button>
+      <button class="nav-item" onclick="setNav(this); showScreen('map')">
+        <i data-lucide="map"></i><span>Map</span>
+      </button>
+      <button class="fab-nav" onclick="showScreen('post-create')">
+        <i data-lucide="plus"></i>
+      </button>
+      <button class="nav-item" onclick="setNav(this); showScreen('chat')">
+        <i data-lucide="message-circle"></i><span>Chat</span>
+      </button>
+      <button class="nav-item" onclick="setNav(this); showScreen('profile')">
+        <i data-lucide="user"></i><span>Profile</span>
+      </button>
     </nav>
-    <button class="d-logout" onclick="doLogout()" type="button"><i class="fas fa-sign-out-alt"></i>Sign Out</button>
-  </aside>
+  </div>
 
-  <!-- MAIN SCROLL AREA -->
-  <main class="pw" id="pw" role="main">
-
-    <!-- HOME FEED -->
-    <div class="tp active" id="tab-home">
-      <div class="hero" role="banner">
-        <div class="hero-c">
-          <div class="hero-badge"><span class="pdot white" aria-hidden="true"></span>Live Community</div>
-          <h2 class="hero-t">Quezon City<br/>Help Network</h2>
-          <p class="hero-s">Real people. Real help. Real time.</p>
-          <div class="hero-stats" role="list">
-            <div class="hsi" role="listitem"><strong id="hToday">—</strong><small>Today</small></div>
-            <div class="hsdiv" aria-hidden="true"></div>
-            <div class="hsi" role="listitem"><strong id="hOnline">—</strong><small>Online</small></div>
-            <div class="hsdiv" aria-hidden="true"></div>
-            <div class="hsi" role="listitem"><strong id="hHelped">—</strong><small>Helped</small></div>
+  <!-- ═══════════ POST CREATION SCREEN ═══════════ -->
+  <div id="screen-post-create" class="screen app-screen">
+    <div class="inner-nav">
+      <button class="btn-back" onclick="showScreen('home')"><i data-lucide="arrow-left"></i></button>
+      <h2 class="inner-title">New Post</h2>
+      <button class="btn btn-primary sm" onclick="showScreen('home')">Publish</button>
+    </div>
+    <div class="screen-scroll pad">
+      <div class="post-create-form">
+        <div class="post-author-row">
+          <img class="post-avatar lg" src="https://ui-avatars.com/api/?name=Juan+Cruz&background=dbeafe&color=1d4ed8&bold=true" alt="You"/>
+          <div>
+            <span class="post-author">Juan dela Cruz</span>
+            <div class="post-location"><i data-lucide="map-pin"></i> Batasan Hills</div>
           </div>
         </div>
-        <div class="hero-art" aria-hidden="true"><div class="hc hc1"></div><div class="hc hc2"></div><svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="opacity:.5">
-          <rect x="8" y="44" width="14" height="28" rx="2" fill="white" opacity=".6"/>
-          <rect x="24" y="36" width="18" height="36" rx="2" fill="white" opacity=".8"/>
-          <rect x="44" y="40" width="16" height="32" rx="2" fill="white" opacity=".7"/>
-          <rect x="61" y="48" width="11" height="24" rx="2" fill="white" opacity=".5"/>
-          <rect x="0" y="72" width="80" height="4" rx="2" fill="white" opacity=".3"/>
-        </svg></div>
-      </div>
-      <div class="ccard">
-        <div class="cc-t">
-          <div class="cc-av" id="ccAv" aria-hidden="true"></div>
-          <button class="cc-ph" onclick="openPost()" type="button">What's happening in your barangay, <span id="ccN">friend</span>?</button>
+        <textarea class="post-textarea" id="post-text" placeholder="What's happening in your barangay? Share an incident, ask for help, or post an update..." rows="5" name="postContent"></textarea>
+
+        <div class="section-label">Category</div>
+        <div class="category-grid">
+          <button class="cat-btn flood active" onclick="selectCat(this)"><i data-lucide="cloud-rain"></i> Flood</button>
+          <button class="cat-btn medical" onclick="selectCat(this)"><i data-lucide="heart-pulse"></i> Medical</button>
+          <button class="cat-btn traffic" onclick="selectCat(this)"><i data-lucide="car"></i> Traffic</button>
+          <button class="cat-btn fire" onclick="selectCat(this)"><i data-lucide="flame"></i> Fire</button>
+          <button class="cat-btn lost" onclick="selectCat(this)"><i data-lucide="search"></i> Lost &amp; Found</button>
+          <button class="cat-btn crime" onclick="selectCat(this)"><i data-lucide="shield-alert"></i> Crime</button>
+          <button class="cat-btn info" onclick="selectCat(this)"><i data-lucide="info"></i> Info</button>
+          <button class="cat-btn other" onclick="selectCat(this)"><i data-lucide="more-horizontal"></i> Other</button>
         </div>
-        <div class="cc-btns">
-          <button class="cc-b" onclick="openPost('Help Needed')" type="button"><i class="fas fa-hand-holding-heart" aria-hidden="true"></i> Help</button>
-          <button class="cc-b" onclick="openPost('Flood')" type="button"><i class="fas fa-water" aria-hidden="true"></i> Flood</button>
-          <button class="cc-b" onclick="openPost('Medical')" type="button"><i class="fas fa-heartbeat" aria-hidden="true"></i> Medical</button>
-          <button class="cc-b" onclick="openPost('Missing')" type="button"><i class="fas fa-search" aria-hidden="true"></i> Missing</button>
+
+        <div class="section-label">Priority Level</div>
+        <div class="priority-row">
+          <button class="priority-btn" onclick="selectPriority(this, 'normal')">Normal</button>
+          <button class="priority-btn active" onclick="selectPriority(this, 'urgent')">Urgent</button>
+          <button class="priority-btn" onclick="selectPriority(this, 'critical')">Critical</button>
         </div>
-      </div>
-      <div class="sort-row" role="toolbar" aria-label="Sort posts">
-        <span class="sort-lbl">Sort:</span>
-        <button class="sort-btn active" onclick="setSort('newest',this)" type="button"><i class="fas fa-clock" style="font-size:.7rem;margin-right:3px"></i>Newest</button>
-        <button class="sort-btn" onclick="setSort('urgent',this)" type="button"><i class="fas fa-exclamation-triangle" style="font-size:.7rem;margin-right:3px"></i>Urgent</button>
-        <button class="sort-btn" onclick="setSort('supported',this)" type="button"><i class="fas fa-heart" style="font-size:.7rem;margin-right:3px"></i>Supported</button>
-      </div>
-      <div class="chips" role="toolbar" aria-label="Filter by tag" id="chips">
-        <button class="chip active" onclick="setFilter('all',this)" type="button">All</button>
-        <button class="chip" onclick="setFilter('Help Needed',this)" type="button"><span class="chip-dot cd-help"></span>Help</button>
-        <button class="chip" onclick="setFilter('Flood',this)" type="button"><span class="chip-dot cd-flood"></span>Flood</button>
-        <button class="chip" onclick="setFilter('Medical',this)" type="button"><span class="chip-dot cd-med"></span>Medical</button>
-        <button class="chip" onclick="setFilter('Missing',this)" type="button"><span class="chip-dot cd-miss"></span>Missing</button>
-        <button class="chip" onclick="setFilter('Traffic',this)" type="button"><span class="chip-dot cd-traf"></span>Traffic</button>
-        <button class="chip" onclick="setFilter('Power',this)" type="button"><span class="chip-dot cd-pow"></span>Power</button>
-        <button class="chip" onclick="setFilter('Info',this)" type="button"><span class="chip-dot cd-info"></span>Info</button>
-      </div>
-      <div class="new-banner hidden" id="newBanner" onclick="reloadFeed()" role="button" tabindex="0">
-        <i class="fas fa-arrow-up" aria-hidden="true"></i> <span id="newBannerTxt">New posts available</span> — tap to refresh
-      </div>
-      <div id="feedWrap">
-        <div id="skeletons" class="sk-wrap" aria-busy="true" aria-label="Loading posts">
-          <div class="sk-card"><div class="sk sk-av"></div><div class="sk-lines"><div class="sk sl w70"></div><div class="sk sl w45"></div><div class="sk sl w85"></div></div></div>
-          <div class="sk-card"><div class="sk sk-av"></div><div class="sk-lines"><div class="sk sl w60"></div><div class="sk sl w35"></div><div class="sk sl w75"></div></div></div>
-          <div class="sk-card"><div class="sk sk-av"></div><div class="sk-lines"><div class="sk sl w80"></div><div class="sk sl w50"></div><div class="sk sl w65"></div></div></div>
+
+        <div class="section-label">Barangay</div>
+        <div class="input-wrap">
+          <i data-lucide="map-pin" class="input-icon"></i>
+          <select name="barangay" class="select-field">
+            <option>Batasan Hills</option><option>Commonwealth</option><option>Fairview</option>
+            <option>Novaliches</option><option>Cubao</option><option>Tandang Sora</option>
+            <option>Holy Spirit</option><option>Payatas</option><option>Bagong Silangan</option>
+          </select>
+          <i data-lucide="chevron-down" class="input-icon right"></i>
         </div>
-        <div id="feedList" role="feed" aria-label="Community posts"></div>
-        <div id="infLoader" class="inf-loader hidden"><i class="fas fa-spinner" aria-hidden="true"></i> Loading more posts…</div>
-        <div id="feedEmpty" class="hidden">
-          <div class="empty-fancy"><div class="ef-icon-design"><i class="fas fa-comments" style="font-size:1.8rem"></i></div><h3>No posts yet</h3><p>Be the first to share something with the community!</p><button class="ef-btn" onclick="openPost()" type="button"><i class="fas fa-plus"></i> Create First Post</button></div>
+
+        <div class="section-label">Add Media</div>
+        <div class="media-upload">
+          <label class="upload-area">
+            <i data-lucide="image-plus"></i>
+            <span>Tap to add photos or videos</span>
+            <input type="file" accept="image/*,video/*" multiple style="display:none" name="media"/>
+          </label>
         </div>
-        <div id="feedError" class="hidden">
-          <div class="error-state"><div class="es-icon">⚠️</div><h3>Failed to load posts</h3><p>Check your internet connection and try again.</p><button class="es-btn" onclick="reloadFeed()" type="button"><i class="fas fa-redo"></i> Retry</button></div>
+
+        <div class="section-label">Location (Optional)</div>
+        <div class="input-wrap">
+          <i data-lucide="navigation" class="input-icon"></i>
+          <input type="text" placeholder="Enter specific street or landmark" name="location"/>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- MAP VIEW -->
-    <div class="tp" id="tab-mapview">
-      <div class="ph"><h2><i class="fas fa-map" aria-hidden="true"></i> Map View</h2><p>Help requests near you</p></div>
+  <!-- ═══════════ POST DETAIL SCREEN ═══════════ -->
+  <div id="screen-post-detail" class="screen app-screen">
+    <div class="inner-nav">
+      <button class="btn-back" onclick="showScreen('home')"><i data-lucide="arrow-left"></i></button>
+      <h2 class="inner-title">Post Detail</h2>
+      <button class="icon-btn"><i data-lucide="more-horizontal"></i></button>
+    </div>
+    <div class="screen-scroll pad">
+      <div class="detail-post-header">
+        <img class="post-avatar lg" src="https://ui-avatars.com/api/?name=Maria+Santos&background=fce7f3&color=9d174d&bold=true" alt="Maria Santos"/>
+        <div class="post-meta">
+          <span class="post-author">Maria Santos</span>
+          <div class="post-meta-row">
+            <span class="rep-badge"><i data-lucide="star"></i> 142 rep</span>
+            <div class="post-location"><i data-lucide="map-pin"></i> Batasan Hills</div>
+          </div>
+        </div>
+        <div class="post-time">5m ago</div>
+      </div>
+      <div class="post-tags mb">
+        <span class="tag flood">Flood</span>
+        <span class="tag urgent">Urgent</span>
+      </div>
+      <p class="detail-post-text">Floodwater is rising rapidly along Batasan Road near the creek. Several families need immediate evacuation assistance. Water level is already at knee height as of 2:30PM. The area near the bridge is impassable. BFP has been notified but residents are asking for more volunteers and boats.</p>
+      <div class="detail-media-placeholder">
+        <div class="media-placeholder-inner">
+          <i data-lucide="image"></i>
+          <span>2 photos attached</span>
+        </div>
+      </div>
+      <div class="resolve-bar">
+        <div class="resolve-info">
+          <i data-lucide="circle-dot"></i>
+          <span>Status: <strong>Open</strong></span>
+        </div>
+        <button class="btn btn-green sm">Mark Resolved</button>
+      </div>
+      <div class="reaction-bar">
+        <button class="react-btn active"><i data-lucide="heart"></i> 24</button>
+        <button class="react-btn"><i data-lucide="thumbs-up"></i> 18</button>
+        <button class="react-btn"><i data-lucide="share-2"></i> Share</button>
+        <button class="react-btn"><i data-lucide="bookmark"></i> Save</button>
+      </div>
+      <div class="comments-section">
+        <h4 class="comments-title">Comments <span>(8)</span></h4>
+        <div class="comment-input-row">
+          <img class="post-avatar sm" src="https://ui-avatars.com/api/?name=Juan+Cruz&background=dbeafe&color=1d4ed8&bold=true" alt="You"/>
+          <div class="comment-input-wrap">
+            <input type="text" placeholder="Write a comment..." name="comment"/>
+            <button class="send-btn"><i data-lucide="send"></i></button>
+          </div>
+        </div>
+        <div class="comment">
+          <img class="post-avatar sm" src="https://ui-avatars.com/api/?name=Pedro+Lim&background=ecfdf5&color=065f46&bold=true" alt="Pedro"/>
+          <div class="comment-body">
+            <span class="comment-author">Pedro Lim</span>
+            <p class="comment-text">I'm a volunteer from QC Rescue. We're heading there now with 2 boats. ETA 20 minutes.</p>
+            <div class="comment-actions">
+              <button class="comment-action"><i data-lucide="heart"></i> 12</button>
+              <button class="comment-action"><i data-lucide="reply"></i> Reply</button>
+              <span class="comment-time">3m ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <img class="post-avatar sm" src="https://ui-avatars.com/api/?name=Rosa+Bautista&background=ede9fe&color=5b21b6&bold=true" alt="Rosa"/>
+          <div class="comment-body">
+            <span class="comment-author">Rosa Bautista</span>
+            <p class="comment-text">I have extra life vests. I'm at the evacuation center near Batasan Hills National High School. Come pick them up.</p>
+            <div class="comment-actions">
+              <button class="comment-action"><i data-lucide="heart"></i> 7</button>
+              <button class="comment-action"><i data-lucide="reply"></i> Reply</button>
+              <span class="comment-time">8m ago</span>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <img class="post-avatar sm" src="https://ui-avatars.com/api/?name=Noel+Garcia&background=fff7ed&color=9a3412&bold=true" alt="Noel"/>
+          <div class="comment-body">
+            <span class="comment-author">Noel Garcia</span>
+            <p class="comment-text">Barangay hotline is 8988-8000. You can also contact QCDRRMO at 8924-0655 for official evacuation coordination.</p>
+            <div class="comment-actions">
+              <button class="comment-action"><i data-lucide="heart"></i> 19</button>
+              <button class="comment-action"><i data-lucide="reply"></i> Reply</button>
+              <span class="comment-time">11m ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ MAP SCREEN ═══════════ -->
+  <div id="screen-map" class="screen app-screen">
+    <div class="inner-nav">
+      <button class="btn-back" onclick="showScreen('home')"><i data-lucide="arrow-left"></i></button>
+      <h2 class="inner-title">QC Incident Map</h2>
+      <button class="icon-btn"><i data-lucide="sliders-horizontal"></i></button>
+    </div>
+    <div class="map-container">
+      <div class="map-frame">
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=121.0,14.6,121.1,14.75&layer=mapnik&marker=14.676,121.043"
+          style="border:0;width:100%;height:100%;"
+          title="Quezon City Map"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
       <div class="map-legend">
-        <span class="ml-dot" style="background:#dc2626"></span>Help
-        <span class="ml-dot" style="background:#2563eb;margin-left:10px"></span>Flood
-        <span class="ml-dot" style="background:#16a34a;margin-left:10px"></span>Medical
-        <span class="ml-dot" style="background:#9333ea;margin-left:10px"></span>Missing
-        <span class="ml-dot" style="background:#6b7280;margin-left:10px"></span>Other
+        <div class="legend-item"><span class="legend-dot flood"></span> Flood</div>
+        <div class="legend-item"><span class="legend-dot medical"></span> Medical</div>
+        <div class="legend-item"><span class="legend-dot fire"></span> Fire</div>
+        <div class="legend-item"><span class="legend-dot traffic"></span> Traffic</div>
       </div>
-      <div id="leafletMap" style="height:400px;margin:0 11px 11px;border-radius:14px;overflow:hidden;box-shadow:var(--sh1)" role="application" aria-label="Map of help requests"></div>
-      <div id="mapPostList" style="padding:0 11px 11px"></div>
-    </div>
-
-    <!-- NEARBY -->
-    <div class="tp" id="tab-nearby">
-      <div class="ph"><h2><i class="fas fa-map-marker-alt"></i> Nearby in QC</h2></div>
-      <div class="map-wrap"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123987.7!2d121.012!3d14.676!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b076e8cf7b0b%3A0xee8e38f20cb96438!2sQuezon%20City%2C%20Metro%20Manila!5e0!3m2!1sen!2sph!4v1710000000000" allowfullscreen loading="lazy" title="QC Map"></iframe></div>
-      <div class="map-chips">
-        <a href="https://maps.google.com/?q=East+Avenue+Medical+Center" target="_blank" rel="noopener" class="mc red"><span class="mc-icon" style="background:#fee2e2;color:#dc2626"><i class="fas fa-hospital" style="font-size:.65rem"></i></span>East Ave Medical</a>
-        <a href="https://maps.google.com/?q=Quezon+City+Hall" target="_blank" rel="noopener" class="mc blue"><span class="mc-icon" style="background:#dbeafe;color:#2563eb"><i class="fas fa-landmark" style="font-size:.65rem"></i></span>City Hall</a>
-        <a href="https://maps.google.com/?q=Quezon+City+Police+District" target="_blank" rel="noopener" class="mc navy"><span class="mc-icon" style="background:#e0e7ff;color:#3730a3"><i class="fas fa-shield-alt" style="font-size:.65rem"></i></span>QCPD HQ</a>
-        <a href="https://maps.google.com/?q=Philippine+Heart+Center" target="_blank" rel="noopener" class="mc red"><span class="mc-icon" style="background:#fee2e2;color:#dc2626"><i class="fas fa-heartbeat" style="font-size:.65rem"></i></span>Heart Center</a>
-        <a href="https://maps.google.com/?q=Lung+Center+Philippines" target="_blank" rel="noopener" class="mc teal"><span class="mc-icon" style="background:#ccfbf1;color:#0f766e"><i class="fas fa-lungs" style="font-size:.65rem"></i></span>Lung Center</a>
-        <a href="https://maps.google.com/?q=Quezon+Memorial+Circle" target="_blank" rel="noopener" class="mc purple"><span class="mc-icon" style="background:#ede9fe;color:#7c3aed"><i class="fas fa-circle" style="font-size:.65rem"></i></span>QM Circle</a>
-      </div>
-    </div>
-
-    <!-- SERVICES -->
-    <div class="tp" id="tab-services">
-      <div class="ph"><h2><i class="fas fa-landmark"></i> Government Services</h2></div>
-      <div class="svc-grid">
-        <a href="https://quezoncity.gov.ph" target="_blank" rel="noopener" class="svc-card" style="--c:#1B4332"><div class="si-design"><i class="fas fa-id-card"></i></div><div class="sinfo"><strong>QC ID / Loyalty Card</strong><span>Apply or renew at Barangay Hall</span></div><i class="fas fa-arrow-right sa"></i></a>
-        <a href="https://quezoncity.gov.ph" target="_blank" rel="noopener" class="svc-card" style="--c:#1a3a5c"><div class="si-design"><i class="fas fa-pills"></i></div><div class="sinfo"><strong>Botika ng QC</strong><span>Free medicines at Health Centers</span></div><i class="fas fa-arrow-right sa"></i></a>
-        <a href="https://quezoncity.gov.ph" target="_blank" rel="noopener" class="svc-card" style="--c:#4a1942"><div class="si-design"><i class="fas fa-graduation-cap"></i></div><div class="sinfo"><strong>Iskolar ng QC</strong><span>Free college tuition for residents</span></div><i class="fas fa-arrow-right sa"></i></a>
-        <a href="https://quezoncity.gov.ph" target="_blank" rel="noopener" class="svc-card" style="--c:#7c2d12"><div class="si-design"><i class="fas fa-home"></i></div><div class="sinfo"><strong>Socialized Housing</strong><span>Low-cost housing programs</span></div><i class="fas fa-arrow-right sa"></i></a>
-        <a href="https://quezoncity.gov.ph" target="_blank" rel="noopener" class="svc-card" style="--c:#713f12"><div class="si-design"><i class="fas fa-user-clock"></i></div><div class="sinfo"><strong>Senior Citizen Benefits</strong><span>Pensions &amp; free checkups</span></div><i class="fas fa-arrow-right sa"></i></a>
-        <a href="https://quezoncity.gov.ph" target="_blank" rel="noopener" class="svc-card" style="--c:#0c4a6e"><div class="si-design"><i class="fas fa-bus"></i></div><div class="sinfo"><strong>Libreng Sakay</strong><span>Free shuttle services</span></div><i class="fas fa-arrow-right sa"></i></a>
-      </div>
-    </div>
-
-    <!-- EMERGENCY -->
-    <div class="tp" id="tab-emergency">
-      <div class="ph eph"><h2><i class="fas fa-exclamation-triangle"></i> Emergency</h2><p>QC 24/7 Hotlines — tap to call</p></div>
-      <div class="em-grid">
-        <a href="tel:911" class="em-card sos-p" aria-label="Call 911 National Emergency"><div class="em-icon-design eid-red"><i class="fas fa-phone"></i></div><div class="einfo"><strong>National Emergency</strong><span class="enum">911</span></div></a>
-        <a href="tel:+6328925151" class="em-card e-navy" aria-label="Call QC Police"><div class="em-icon-design eid-navy"><i class="fas fa-shield-alt"></i></div><div class="einfo"><strong>QC Police</strong><span class="enum">(02) 8892-5151</span></div></a>
-        <a href="tel:+6328926374" class="em-card e-orange" aria-label="Call QC Fire Department"><div class="em-icon-design eid-orange"><i class="fas fa-fire-extinguisher"></i></div><div class="einfo"><strong>QC Fire Dept</strong><span class="enum">(02) 8892-6374</span></div></a>
-        <a href="tel:+6328921731" class="em-card e-green" aria-label="Call QC Ambulance"><div class="em-icon-design eid-green"><i class="fas fa-ambulance"></i></div><div class="einfo"><strong>QC Ambulance</strong><span class="enum">(02) 8892-1731</span></div></a>
-        <a href="tel:+6328928754" class="em-card e-teal" aria-label="Call DRRM Office"><div class="em-icon-design eid-teal"><i class="fas fa-water"></i></div><div class="einfo"><strong>DRRM Office</strong><span class="enum">(02) 8892-8754</span></div></a>
-        <a href="tel:+6328924601" class="em-card e-purple" aria-label="Call East Ave Medical"><div class="em-icon-design eid-purple"><i class="fas fa-hospital"></i></div><div class="einfo"><strong>East Ave Medical</strong><span class="enum">(02) 8892-4601</span></div></a>
-        <a href="tel:18001888-1999" class="em-card e-blue" aria-label="Call Mental Health Hotline"><div class="em-icon-design eid-blue"><i class="fas fa-brain"></i></div><div class="einfo"><strong>Mental Health</strong><span class="enum">1-800-1888-1999</span></div></a>
-        <a href="tel:143" class="em-card e-amber" aria-label="Call DSWD"><div class="em-icon-design eid-amber"><i class="fas fa-hands-helping"></i></div><div class="einfo"><strong>DSWD</strong><span class="enum">143</span></div></a>
-      </div>
-      <div class="sos-box">
-        <div class="sos-hdr"><i class="fas fa-broadcast-tower"></i> Broadcast SOS Alert</div>
-        <textarea id="sosT" placeholder="Describe your emergency and exact location…" maxlength="500" aria-label="SOS message"></textarea>
-        <button class="btn-sos" onclick="broadcastSOS()" type="button"><i class="fas fa-satellite-dish"></i> BROADCAST SOS NOW</button>
-      </div>
-    </div>
-
-    <!-- WEATHER -->
-    <div class="tp" id="tab-weather">
-      <div class="ph"><h2><i class="fas fa-cloud-sun"></i> Weather &amp; Alerts</h2></div>
-      <div class="w-hero" id="wHero">
-        <div class="wh-t">
-          <div><div class="wh-city" id="wCity">Detecting location…</div><div class="wh-temp" id="wTemp">--°</div><div class="wh-desc" id="wDesc">Loading…</div></div>
-          <div class="wh-icon" id="wIcon" aria-hidden="true"><i class="fas fa-cloud-sun" style="font-size:3rem;opacity:.8"></i></div>
+      <div class="map-incidents">
+        <h4 class="map-panel-title">Nearby Incidents</h4>
+        <div class="map-incident-item">
+          <span class="legend-dot flood"></span>
+          <div>
+            <strong>Flood Alert</strong>
+            <span>Batasan Road — 0.3 km</span>
+          </div>
+          <span class="post-time">5m</span>
         </div>
-        <div class="wh-stats">
-          <div class="whs"><i class="fas fa-tint" aria-hidden="true"></i><span id="wHum">--%</span><small>Humidity</small></div>
-          <div class="whs"><i class="fas fa-wind" aria-hidden="true"></i><span id="wWind">--</span><small>Wind km/h</small></div>
-          <div class="whs"><i class="fas fa-eye" aria-hidden="true"></i><span id="wVis">--</span><small>Visibility km</small></div>
+        <div class="map-incident-item">
+          <span class="legend-dot medical"></span>
+          <div>
+            <strong>Blood Donor Needed</strong>
+            <span>QC General Hospital — 1.1 km</span>
+          </div>
+          <span class="post-time">18m</span>
         </div>
-        <button class="wh-ref" onclick="loadWeather()" type="button"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh</button>
-      </div>
-      <div class="adv-card"><div class="adv-i"><i class="fas fa-exclamation-triangle" style="color:var(--orange)"></i></div><div><strong>PAGASA Advisory</strong><p id="advTxt">Tap refresh to check current conditions.</p></div><a href="https://www.pagasa.dost.gov.ph" target="_blank" rel="noopener" class="adv-lnk">PAGASA →</a></div>
-      <div class="flood-card"><h4><i class="fas fa-water" style="color:var(--blue);margin-right:6px"></i>Flood-Prone Barangays</h4><p>Stay alert during heavy rains:</p>
-        <div class="fp-row"><span class="fp h">Batasan Hills</span><span class="fp h">Commonwealth</span><span class="fp m">Payatas</span><span class="fp m">Bagong Silangan</span><span class="fp m">San Bartolome</span><span class="fp l">Novaliches</span><span class="fp l">Fairview</span><span class="fp l">Gulod</span></div>
-        <div class="fp-legend"><span class="fp h">High</span><span class="fp m">Medium</span><span class="fp l">Low</span> Risk</div>
-      </div>
-    </div>
-
-    <!-- BULLETIN -->
-    <div class="tp" id="tab-bulletin">
-      <div class="ph"><h2><i class="fas fa-bullhorn"></i> Announcements</h2></div>
-      <div id="bulletinList"></div>
-    </div>
-
-    <!-- LOST & FOUND -->
-    <div class="tp" id="tab-lostfound">
-      <div class="ph"><h2><i class="fas fa-search-location"></i> Lost &amp; Found</h2></div>
-      <div class="ccard">
-        <div class="cc-t">
-          <div class="cc-av" id="lfAv" aria-hidden="true"></div>
-          <button class="cc-ph" onclick="openPost('Lost Person','lostfound')" type="button">Post a missing person, pet, or item…</button>
-        </div>
-        <div class="cc-btns">
-          <button class="cc-b" onclick="openPost('Lost Person','lostfound')" type="button"><i class="fas fa-user"></i> Lost Person</button>
-          <button class="cc-b" onclick="openPost('Lost Pet','lostfound')" type="button"><i class="fas fa-paw"></i> Lost Pet</button>
-          <button class="cc-b" onclick="openPost('Lost Item','lostfound')" type="button"><i class="fas fa-shopping-bag"></i> Lost Item</button>
-          <button class="cc-b" onclick="openPost('Found','lostfound')" type="button"><i class="fas fa-check-circle"></i> Found</button>
+        <div class="map-incident-item">
+          <span class="legend-dot traffic"></span>
+          <div>
+            <strong>Road Closure</strong>
+            <span>EDSA-Cubao Underpass — 2.8 km</span>
+          </div>
+          <span class="post-time">2h</span>
         </div>
       </div>
-      <div id="lfList" role="feed"></div>
-      <div id="lfEmpty" class="hidden"><div class="empty-fancy"><div class="ef-icon-design"><i class="fas fa-search" style="font-size:1.8rem"></i></div><h3>No Lost &amp; Found posts yet</h3><p>Post about a missing person, pet, or item.</p><button class="ef-btn" onclick="openPost('Lost Person','lostfound')" type="button"><i class="fas fa-plus"></i> Create Post</button></div></div>
+      <button class="fab-map" onclick="showScreen('post-create')">
+        <i data-lucide="plus"></i>
+      </button>
     </div>
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="setNav(this); showScreen('home')"><i data-lucide="home"></i><span>Home</span></button>
+      <button class="nav-item active" onclick="setNav(this); showScreen('map')"><i data-lucide="map"></i><span>Map</span></button>
+      <button class="fab-nav" onclick="showScreen('post-create')"><i data-lucide="plus"></i></button>
+      <button class="nav-item" onclick="setNav(this); showScreen('chat')"><i data-lucide="message-circle"></i><span>Chat</span></button>
+      <button class="nav-item" onclick="setNav(this); showScreen('profile')"><i data-lucide="user"></i><span>Profile</span></button>
+    </nav>
+  </div>
 
-    <!-- REPORT ISSUE -->
-    <div class="tp" id="tab-report">
-      <div class="ph"><h2><i class="fas fa-flag"></i> Report Issue</h2></div>
-      <div class="rform">
-        <div class="fg"><select class="fsel" id="rType" aria-label="Issue type"><option>Pothole / Road Damage</option><option>Broken Streetlight</option><option>Illegal Dumping</option><option>Flooding / Drainage</option><option>Noise Complaint</option><option>Water Supply Issue</option><option>Power Outage</option><option>Fallen Tree / Hazard</option><option>Traffic / Road Issue</option><option>Other</option></select></div>
-        <div class="fg"><div class="iw"><i class="fas fa-map-marker-alt"></i><input type="text" id="rLoc" placeholder="Exact location / Street / Barangay" maxlength="200" aria-label="Location"/></div></div>
-        <div class="fg"><textarea class="fta" id="rDesc" placeholder="Describe the issue in detail…" maxlength="1000" aria-label="Description"></textarea></div>
-        <button class="btn-primary" id="rSubmitBtn" onclick="submitIssueReport()" type="button"><i class="fas fa-flag"></i> Submit Report</button>
+  <!-- ═══════════ CHAT LIST SCREEN ═══════════ -->
+  <div id="screen-chat" class="screen app-screen">
+    <div class="inner-nav">
+      <button class="btn-back" onclick="showScreen('home')"><i data-lucide="arrow-left"></i></button>
+      <h2 class="inner-title">Messages</h2>
+      <button class="icon-btn"><i data-lucide="edit"></i></button>
+    </div>
+    <div class="screen-scroll">
+      <div class="search-bar-wrap pad-h">
+        <div class="input-wrap search">
+          <i data-lucide="search" class="input-icon"></i>
+          <input type="search" placeholder="Search conversations..."/>
+        </div>
       </div>
-      <div id="reportList" role="feed"></div>
-      <div id="reportEmpty" class="hidden"><div class="empty-fancy"><div class="ef-icon-design"><i class="fas fa-flag" style="font-size:1.8rem"></i></div><h3>No reports yet</h3><p>Be the first to report a community issue.</p></div></div>
-    </div>
-
-    <!-- SAVED POSTS -->
-    <div class="tp" id="tab-saved">
-      <div class="ph"><h2><i class="fas fa-bookmark"></i> Saved Posts</h2><p>Your bookmarked help requests</p></div>
-      <div id="savedList" role="feed"></div>
-      <div id="savedEmpty" class="hidden"><div class="empty-fancy"><div class="ef-icon-design"><i class="fas fa-bookmark" style="font-size:1.8rem"></i></div><h3>No saved posts yet</h3><p>Tap the bookmark icon on any post to save it for later.</p><button class="ef-btn" onclick="goTab('home')" type="button"><i class="fas fa-home"></i> Browse Feed</button></div></div>
-    </div>
-
-    <!-- ACTIVITY -->
-    <div class="tp" id="tab-activity">
-      <div class="ph"><h2><i class="fas fa-bell"></i> Activity Feed</h2><p>Recent platform activity</p></div>
-      <div id="actList"><div class="empty-fancy"><div class="ef-icon-design"><i class="fas fa-bell" style="font-size:1.8rem"></i></div><h3>No activity yet</h3><p>Activity will appear here when things happen.</p></div></div>
-    </div>
-
-    <!-- ACCOUNT / PROFILE -->
-    <div class="tp" id="tab-account">
-      <div class="prof-banner-wrap">
-        <div class="prof-banner"></div>
-        <div class="prof-av-wrap">
-          <div class="prof-av-con">
-            <div class="prof-av" id="profAv"></div>
-            <button class="av-cam-btn" onclick="triggerAvatarUpload()" type="button" aria-label="Change profile picture"><i class="fas fa-camera"></i></button>
-            <input type="file" id="avInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none" onchange="uploadAvatar(this)" aria-label="Upload avatar"/>
+      <div class="chat-list">
+        <div class="chat-item unread" onclick="showScreen('chat-ui')">
+          <img class="post-avatar" src="https://ui-avatars.com/api/?name=Pedro+Lim&background=ecfdf5&color=065f46&bold=true" alt="Pedro"/>
+          <div class="chat-info">
+            <div class="chat-row">
+              <span class="chat-name">Pedro Lim</span>
+              <span class="chat-time">2m</span>
+            </div>
+            <div class="chat-row">
+              <p class="chat-preview">We're heading there now with 2 boats...</p>
+              <span class="unread-badge">2</span>
+            </div>
+          </div>
+        </div>
+        <div class="chat-item" onclick="showScreen('chat-ui')">
+          <img class="post-avatar" src="https://ui-avatars.com/api/?name=QC+DRRMO&background=dbeafe&color=1d4ed8&bold=true" alt="DRRMO"/>
+          <div class="chat-info">
+            <div class="chat-row">
+              <span class="chat-name">QC DRRMO Hotline</span>
+              <span class="chat-time">1h</span>
+            </div>
+            <div class="chat-row">
+              <p class="chat-preview">Your report has been acknowledged. Units are on the way.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat-item unread" onclick="showScreen('chat-ui')">
+          <img class="post-avatar" src="https://ui-avatars.com/api/?name=Rosa+Bautista&background=ede9fe&color=5b21b6&bold=true" alt="Rosa"/>
+          <div class="chat-info">
+            <div class="chat-row">
+              <span class="chat-name">Rosa Bautista</span>
+              <span class="chat-time">2h</span>
+            </div>
+            <div class="chat-row">
+              <p class="chat-preview">I have the life vests ready at the evacuation center.</p>
+              <span class="unread-badge">1</span>
+            </div>
+          </div>
+        </div>
+        <div class="chat-item" onclick="showScreen('chat-ui')">
+          <img class="post-avatar" src="https://ui-avatars.com/api/?name=Noel+Garcia&background=fff7ed&color=9a3412&bold=true" alt="Noel"/>
+          <div class="chat-info">
+            <div class="chat-row">
+              <span class="chat-name">Noel Garcia</span>
+              <span class="chat-time">5h</span>
+            </div>
+            <div class="chat-row">
+              <p class="chat-preview">Let me know if you need more supplies tomorrow.</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat-item" onclick="showScreen('chat-ui')">
+          <img class="post-avatar" src="https://ui-avatars.com/api/?name=Batasan+Hills+Group&background=fef3c7&color=92400e&bold=true" alt="Group"/>
+          <div class="chat-info">
+            <div class="chat-row">
+              <span class="chat-name">Batasan Hills Neighbors</span>
+              <span class="chat-time">Yesterday</span>
+            </div>
+            <div class="chat-row">
+              <p class="chat-preview">Maria: Thank you everyone for the support!</p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="prof-body">
-        <div class="prof-name-row">
-          <h2 class="prof-name" id="profName">—</h2>
-          <div id="profBadges" class="badge-row"></div>
-        </div>
-        <div id="profRep" class="rep-row"></div>
-        <div class="prof-meta"><span id="profBrgy"></span><span class="role-chip" id="profRole">—</span></div>
-        <div class="prof-stats">
-          <div class="ps-item"><strong id="psPosts">0</strong><small>Posts</small></div>
-          <div class="ps-item"><strong id="psHelped">0</strong><small>Helped</small></div>
-          <div class="ps-item"><strong id="psJoined">—</strong><small>Joined</small></div>
-        </div>
-        <button class="btn-sec" onclick="goTab('settings')" type="button"><i class="fas fa-cog"></i> Settings</button>
-        <h4 class="sec-lbl">My Posts</h4>
-        <div id="myList" role="feed"></div>
-        <div id="myEmpty" class="hidden"><div class="empty-fancy"><div class="ef-icon-design"><i class="fas fa-pencil-alt" style="font-size:1.8rem"></i></div><h3>No posts yet</h3><p>Share what's happening in your barangay.</p><button class="ef-btn" onclick="openPost()" type="button"><i class="fas fa-plus"></i> Create Post</button></div></div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="setNav(this); showScreen('home')"><i data-lucide="home"></i><span>Home</span></button>
+      <button class="nav-item" onclick="setNav(this); showScreen('map')"><i data-lucide="map"></i><span>Map</span></button>
+      <button class="fab-nav" onclick="showScreen('post-create')"><i data-lucide="plus"></i></button>
+      <button class="nav-item active" onclick="setNav(this); showScreen('chat')"><i data-lucide="message-circle"></i><span>Chat</span></button>
+      <button class="nav-item" onclick="setNav(this); showScreen('profile')"><i data-lucide="user"></i><span>Profile</span></button>
+    </nav>
+  </div>
+
+  <!-- ═══════════ CHAT UI SCREEN ═══════════ -->
+  <div id="screen-chat-ui" class="screen app-screen">
+    <div class="chat-nav">
+      <button class="btn-back" onclick="showScreen('chat')"><i data-lucide="arrow-left"></i></button>
+      <img class="post-avatar" src="https://ui-avatars.com/api/?name=Pedro+Lim&background=ecfdf5&color=065f46&bold=true" alt="Pedro"/>
+      <div class="chat-nav-info">
+        <span class="chat-name">Pedro Lim</span>
+        <span class="chat-status online">Online</span>
+      </div>
+      <div class="chat-nav-actions">
+        <button class="icon-btn"><i data-lucide="phone"></i></button>
+        <button class="icon-btn"><i data-lucide="more-vertical"></i></button>
       </div>
     </div>
-
-    <!-- ADMIN -->
-    <div class="tp" id="tab-admin">
-      <div class="ph"><h2><i class="fas fa-shield-alt"></i> Admin Dashboard</h2></div>
-      <div class="admin-stats" id="adminStats">
-        <div class="ast"><strong id="aTotalPosts">—</strong><small>Total Posts</small></div>
-        <div class="ast"><strong id="aTotalUsers">—</strong><small>Total Users</small></div>
-        <div class="ast"><strong id="aReports">—</strong><small>Reports</small></div>
-        <div class="ast"><strong id="aOnline">—</strong><small>Online Now</small></div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-date-divider">Today, 2:35 PM</div>
+      <div class="msg received">
+        <img class="msg-avatar" src="https://ui-avatars.com/api/?name=Pedro+Lim&background=ecfdf5&color=065f46&bold=true" alt="Pedro"/>
+        <div class="msg-bubble">Hi, I saw your flood report. We can help!</div>
+        <span class="msg-time">2:35</span>
       </div>
-      <div class="admin-tabs" role="tablist">
-        <button class="atab active" onclick="adminTab('posts',this)" type="button" role="tab">Posts</button>
-        <button class="atab" onclick="adminTab('users',this)" type="button" role="tab">Users</button>
-        <button class="atab" onclick="adminTab('reports',this)" type="button" role="tab">Reports</button>
+      <div class="msg sent">
+        <div class="msg-bubble">Thank you so much! The water level is rising fast. We have 3 families stranded.</div>
+        <span class="msg-time">2:36</span>
       </div>
-      <div id="adminContent"></div>
-    </div>
-
-    <!-- GUIDELINES -->
-    <div class="tp" id="tab-guidelines">
-      <div class="ph"><h2><i class="fas fa-book-open"></i> Community Guidelines</h2></div>
-      <div class="guide-hero"><div class="guide-em-design" aria-hidden="true"><i class="fas fa-hands-helping" style="color:white;font-size:1.4rem"></i></div><h3>Together We Help Each Other</h3><p>QC Help Support is a safe space for Quezon City residents to seek and offer help during emergencies and daily needs.</p></div>
-      <div class="guide-sec">
-        <div class="guide-title">Community Rules</div>
-        <div class="guide-item"><div class="gi-num">1</div><div><strong>Be Respectful</strong><p>Treat all community members with kindness. No bullying, harassment, or hate speech.</p></div></div>
-        <div class="guide-item"><div class="gi-num">2</div><div><strong>Post Truthfully</strong><p>Only post verified information. False reports during emergencies can cause panic and harm.</p></div></div>
-        <div class="guide-item"><div class="gi-num">3</div><div><strong>No Spam</strong><p>Do not post the same request multiple times. Update your existing post instead.</p></div></div>
-        <div class="guide-item"><div class="gi-num">4</div><div><strong>Protect Privacy</strong><p>Do not share personal details publicly. Use messages for sensitive information.</p></div></div>
-        <div class="guide-item"><div class="gi-num">5</div><div><strong>Tag Correctly</strong><p>Use the right tags so responders can find urgent requests quickly.</p></div></div>
+      <div class="msg received">
+        <img class="msg-avatar" src="https://ui-avatars.com/api/?name=Pedro+Lim&background=ecfdf5&color=065f46&bold=true" alt="Pedro"/>
+        <div class="msg-bubble">We're heading there now with 2 boats. ETA 20 minutes.</div>
+        <span class="msg-time">2:37</span>
       </div>
-      <div class="guide-sec">
-        <div class="guide-title">🆘 How to Request Help</div>
-        <div class="guide-step"><span class="gs-num">1</span><div>Tap the <strong>+ button</strong> or "What's happening in your barangay?"</div></div>
-        <div class="guide-step"><span class="gs-num">2</span><div>Choose the <strong>right tag</strong> — Help Needed, Flood, Medical, etc.</div></div>
-        <div class="guide-step"><span class="gs-num">3</span><div>Add your <strong>location</strong> (barangay and street if safe to share)</div></div>
-        <div class="guide-step"><span class="gs-num">4</span><div>Set <strong>urgency level</strong> — High / Medium / Low</div></div>
-        <div class="guide-step"><span class="gs-num">5</span><div>Add a <strong>photo</strong> if it helps describe the situation</div></div>
-        <div class="guide-step"><span class="gs-num">6</span><div><strong>Update the status</strong> once help has arrived or the issue is resolved</div></div>
+      <div class="msg sent">
+        <div class="msg-bubble">Please hurry, there are elderly people and a baby. We're near the bridge at Batasan Road.</div>
+        <span class="msg-time">2:38</span>
       </div>
-      <div class="guide-sec">
-        <div class="guide-title">Safety Guidelines</div>
-        <div class="guide-safety">
-          <div class="gsf"><i class="fas fa-phone"></i><div><strong>Life-threatening emergency?</strong><p>Call 911 first, then post on QC Help.</p></div></div>
-          <div class="gsf"><i class="fas fa-user-shield"></i><div><strong>Never share passwords</strong><p>QC Help staff will never ask for your password.</p></div></div>
-          <div class="gsf"><i class="fas fa-flag"></i><div><strong>Report abuse</strong><p>Use the flag icon to report fake or inappropriate posts.</p></div></div>
-          <div class="gsf"><i class="fas fa-heart"></i><div><strong>Mental health</strong><p>Call 1-800-1888-1999 for 24/7 mental health support.</p></div></div>
-        </div>
-      </div>
-      <div class="guide-footer"><p>By using QC Help Support, you agree to follow these community guidelines.</p><p>Violations may result in account suspension.</p></div>
-    </div>
-
-    <!-- ABOUT PAGE -->
-    <div class="tp" id="tab-about">
-      <div class="about-hero">
-        <div class="about-logo-design" aria-hidden="true"><i class="fas fa-city" style="color:white;font-size:2rem"></i></div>
-        <h2>QC Help Support</h2>
-        <p>Quezon City Community Help Network</p>
-        <div class="about-version">v7.0 · Built for Quezon City</div>
-      </div>
-      <div class="about-sec">
-        <div class="about-sec-icon"><i class="fas fa-bullseye" style="font-size:1.8rem;color:var(--green)"></i></div>
-        <h3>Our Purpose</h3>
-        <p>QC Help Support connects Quezon City residents during emergencies, natural disasters, and everyday community needs. We believe that neighbors helping neighbors creates a stronger, safer community for everyone.</p>
-      </div>
-      <div class="about-sec">
-        <div class="about-sec-icon"><i class="fas fa-hands-helping" style="font-size:1.8rem;color:var(--green)"></i></div>
-        <h3>How to Request Help</h3>
-        <ul class="about-list">
-          <li>Create a free account with your email</li>
-          <li>Tap the <strong>+ button</strong> to create a post</li>
-          <li>Choose the right tag (Flood, Medical, Missing, etc.)</li>
-          <li>Add your exact location and a photo if safe to do so</li>
-          <li>Set the urgency level — High, Medium, or Low</li>
-          <li>Submit and the community will respond</li>
-        </ul>
-      </div>
-      <div class="about-sec">
-        <div class="about-sec-icon"><i class="fas fa-users" style="font-size:1.8rem;color:var(--green)"></i></div>
-        <h3>How to Volunteer</h3>
-        <ul class="about-list">
-          <li>Browse help requests on the Home Feed</li>
-          <li>Tap <strong>Offer Help</strong> on any post</li>
-          <li>Choose how you can assist (supplies, transport, medical, etc.)</li>
-          <li>Add a personal message to coordinate directly</li>
-          <li>Mark posts as "Resolved" once help is delivered</li>
-        </ul>
-      </div>
-      <div class="about-sec">
-        <div class="about-sec-icon"><i class="fas fa-trophy" style="font-size:1.8rem;color:var(--green)"></i></div>
-        <h3>Reputation System</h3>
-        <p>Your community reputation grows as you help others. Earn points for every post (+10) and every help you give (+25).</p>
-        <div class="rep-levels">
-          <div class="rl-item"><span class="rep-badge rep-new"><span class="rep-icon">N</span>New Member</span><span>0–29 pts</span></div>
-          <div class="rl-item"><span class="rep-badge rep-helper"><span class="rep-icon">H</span>Helper</span><span>30–99 pts</span></div>
-          <div class="rl-item"><span class="rep-badge rep-trusted"><span class="rep-icon">T</span>Trusted</span><span>100–199 pts</span></div>
-          <div class="rl-item"><span class="rep-badge rep-champion"><span class="rep-icon">C</span>Champion</span><span>200–499 pts</span></div>
-          <div class="rl-item"><span class="rep-badge rep-hero"><span class="rep-icon">H</span>Community Hero</span><span>500+ pts</span></div>
-        </div>
-      </div>
-      <div class="about-sec">
-        <div class="about-sec-icon"><i class="fas fa-phone" style="font-size:1.8rem;color:var(--green)"></i></div>
-        <h3>Contact &amp; Support</h3>
-        <p>For platform issues, abuse reports, or partnership inquiries, please use the Report Issue feature or contact your Barangay Hall.</p>
+      <div class="msg received">
+        <img class="msg-avatar" src="https://ui-avatars.com/api/?name=Pedro+Lim&background=ecfdf5&color=065f46&bold=true" alt="Pedro"/>
+        <div class="msg-bubble">Understood. Stay elevated and signal us with a light or cloth. We will find you.</div>
+        <span class="msg-time">2:39</span>
       </div>
     </div>
+    <div class="chat-input-bar">
+      <button class="icon-btn"><i data-lucide="paperclip"></i></button>
+      <div class="chat-input-wrap">
+        <input type="text" id="chat-input" placeholder="Type a message..." name="message"/>
+      </div>
+      <button class="send-btn primary" onclick="sendMessage()">
+        <i data-lucide="send"></i>
+      </button>
+    </div>
+  </div>
 
-    <!-- SETTINGS -->
-    <div class="tp" id="tab-settings">
-      <div class="ph"><h2><i class="fas fa-cog"></i> Settings</h2></div>
-      <div class="set-sec">
-        <div class="set-lbl"><i class="fas fa-image" style="margin-right:5px"></i>Profile Picture</div>
-        <div class="set-card av-set">
-          <div class="cur-av" id="setAvPrev"></div>
-          <div class="av-btns">
-            <button class="btn-sec" onclick="triggerAvatarUpload()" type="button"><i class="fas fa-upload"></i> Upload Photo</button>
-            <button class="btn-danger-s" onclick="removeAvatar()" type="button"><i class="fas fa-trash"></i> Remove</button>
+  <!-- ═══════════ ACTIVITY SCREEN ═══════════ -->
+  <div id="screen-activity" class="screen app-screen">
+    <div class="inner-nav">
+      <button class="btn-back" onclick="showScreen('home')"><i data-lucide="arrow-left"></i></button>
+      <h2 class="inner-title">Activity Feed</h2>
+      <button class="icon-btn"><i data-lucide="more-horizontal"></i></button>
+    </div>
+    <div class="screen-scroll pad">
+      <div class="activity-tabs">
+        <button class="act-tab active" onclick="switchTab(this)">All</button>
+        <button class="act-tab" onclick="switchTab(this)">Mentions</button>
+        <button class="act-tab" onclick="switchTab(this)">Reactions</button>
+      </div>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="act-icon blue"><i data-lucide="heart"></i></div>
+          <div class="act-content">
+            <p><strong>Pedro Lim</strong> and <strong>18 others</strong> reacted to your flood report in Batasan Hills.</p>
+            <span class="act-time">2 minutes ago</span>
           </div>
-          <p class="set-hint">JPG, PNG or GIF · Max 3MB</p>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon green"><i data-lucide="message-circle"></i></div>
+          <div class="act-content">
+            <p><strong>Rosa Bautista</strong> commented on your post: "I have the life vests ready..."</p>
+            <span class="act-time">8 minutes ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon purple"><i data-lucide="bell"></i></div>
+          <div class="act-content">
+            <p><strong>QC DRRMO</strong> issued a new flood advisory for Batasan Hills and Commonwealth areas.</p>
+            <span class="act-time">15 minutes ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon orange"><i data-lucide="check-circle"></i></div>
+          <div class="act-content">
+            <p>Your post about the stranded family in <strong>Batasan Hills</strong> has been marked as resolved.</p>
+            <span class="act-time">1 hour ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon blue"><i data-lucide="user-plus"></i></div>
+          <div class="act-content">
+            <p><strong>Noel Garcia</strong> started following you in the community.</p>
+            <span class="act-time">3 hours ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon pink"><i data-lucide="share-2"></i></div>
+          <div class="act-content">
+            <p><strong>Ana Villanueva</strong> shared your traffic alert post about EDSA-Cubao.</p>
+            <span class="act-time">5 hours ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="act-icon green"><i data-lucide="star"></i></div>
+          <div class="act-content">
+            <p>You earned <strong>+15 reputation points</strong> for helping resolve the Fairview incident.</p>
+            <span class="act-time">Yesterday</span>
+          </div>
         </div>
       </div>
-      <div class="set-sec">
-        <div class="set-lbl"><i class="fas fa-user" style="margin-right:5px"></i>Profile Information</div>
-        <div class="set-card">
-          <div class="fg"><label for="setName">Display Name</label><div class="iw"><i class="fas fa-user"></i><input type="text" id="setName" placeholder="Your name" maxlength="60"/></div></div>
-          <div class="fg"><label for="setBrgy">Barangay</label><div class="iw"><i class="fas fa-map-marker-alt"></i><input type="text" id="setBrgy" placeholder="Your barangay" maxlength="80"/></div></div>
-          <div class="fg"><label for="setRole">Role</label><div class="iw"><i class="fas fa-id-badge"></i><select id="setRole"><option value="resident">Resident</option><option value="nonresident">Non-Resident</option></select></div></div>
-          <button class="btn-primary" onclick="saveProfile()" type="button"><i class="fas fa-save"></i> Save Changes</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ PROFILE SCREEN ═══════════ -->
+  <div id="screen-profile" class="screen app-screen">
+    <div class="inner-nav transparent">
+      <button class="btn-back" onclick="showScreen('home')"><i data-lucide="arrow-left"></i></button>
+      <h2 class="inner-title">Profile</h2>
+      <button class="icon-btn" onclick="showScreen('admin')"><i data-lucide="settings"></i></button>
+    </div>
+    <div class="screen-scroll">
+      <div class="profile-hero">
+        <div class="profile-avatar-wrap">
+          <img class="profile-avatar" src="https://ui-avatars.com/api/?name=Juan+Cruz&background=dbeafe&color=1d4ed8&bold=true&size=128" alt="Juan dela Cruz"/>
+          <button class="avatar-edit-btn"><i data-lucide="camera"></i></button>
+        </div>
+        <h2 class="profile-name">Juan dela Cruz</h2>
+        <p class="profile-barangay"><i data-lucide="map-pin"></i> Batasan Hills, Quezon City</p>
+        <div class="profile-rep">
+          <i data-lucide="star"></i>
+          <span>142 Reputation Points</span>
+        </div>
+        <div class="profile-stats">
+          <div class="stat">
+            <span class="stat-num">47</span>
+            <span class="stat-lbl">Posts</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num">213</span>
+            <span class="stat-lbl">Helped</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num">38</span>
+            <span class="stat-lbl">Resolved</span>
+          </div>
         </div>
       </div>
-      <div class="set-sec">
-        <div class="set-lbl"><i class="fas fa-lock" style="margin-right:5px"></i>Change Password</div>
-        <div class="set-card">
-          <div class="fg"><label for="pwNew">New Password</label><div class="iw"><i class="fas fa-lock"></i><input type="password" id="pwNew" placeholder="New password (min 6)" maxlength="128"/><button class="tpw" onclick="tpw('pwNew',this)" type="button"><i class="fas fa-eye"></i></button></div></div>
-          <div class="fg"><label for="pwNew2">Confirm Password</label><div class="iw"><i class="fas fa-lock"></i><input type="password" id="pwNew2" placeholder="Repeat new password" maxlength="128"/></div></div>
-          <button class="btn-primary" onclick="changePassword()" type="button"><i class="fas fa-key"></i> Change Password</button>
+
+      <div class="profile-body">
+        <div class="profile-section-title">My Activity</div>
+        <div class="profile-menu-list">
+          <div class="profile-menu-item" onclick="showScreen('activity')">
+            <div class="pmenu-icon blue"><i data-lucide="activity"></i></div>
+            <div class="pmenu-content">
+              <span class="pmenu-label">Recent Posts</span>
+              <span class="pmenu-sub">47 posts shared</span>
+            </div>
+            <i data-lucide="chevron-right" class="pmenu-arrow"></i>
+          </div>
+          <div class="profile-menu-item">
+            <div class="pmenu-icon green"><i data-lucide="check-circle"></i></div>
+            <div class="pmenu-content">
+              <span class="pmenu-label">Resolved Cases</span>
+              <span class="pmenu-sub">38 incidents resolved</span>
+            </div>
+            <i data-lucide="chevron-right" class="pmenu-arrow"></i>
+          </div>
+          <div class="profile-menu-item">
+            <div class="pmenu-icon purple"><i data-lucide="bookmark"></i></div>
+            <div class="pmenu-content">
+              <span class="pmenu-label">Saved Posts</span>
+              <span class="pmenu-sub">12 posts saved</span>
+            </div>
+            <i data-lucide="chevron-right" class="pmenu-arrow"></i>
+          </div>
+        </div>
+
+        <div class="profile-section-title">Account</div>
+        <div class="profile-menu-list">
+          <div class="profile-menu-item">
+            <div class="pmenu-icon orange"><i data-lucide="user"></i></div>
+            <div class="pmenu-content">
+              <span class="pmenu-label">Edit Profile</span>
+            </div>
+            <i data-lucide="chevron-right" class="pmenu-arrow"></i>
+          </div>
+          <div class="profile-menu-item">
+            <div class="pmenu-icon blue"><i data-lucide="bell"></i></div>
+            <div class="pmenu-content">
+              <span class="pmenu-label">Notifications</span>
+            </div>
+            <i data-lucide="chevron-right" class="pmenu-arrow"></i>
+          </div>
+          <div class="profile-menu-item">
+            <div class="pmenu-icon pink"><i data-lucide="shield"></i></div>
+            <div class="pmenu-content">
+              <span class="pmenu-label">Privacy &amp; Security</span>
+            </div>
+            <i data-lucide="chevron-right" class="pmenu-arrow"></i>
+          </div>
+          <div class="profile-menu-item" onclick="showScreen('admin')">
+            <div class="pmenu-icon purple"><i data-lucide="layout-dashboard"></i></div>
+            <div class="pmenu-content">
+              <span class="pmenu-label">Admin Dashboard</span>
+            </div>
+            <i data-lucide="chevron-right" class="pmenu-arrow"></i>
+          </div>
+          <div class="profile-menu-item danger" onclick="showScreen('welcome')">
+            <div class="pmenu-icon red"><i data-lucide="log-out"></i></div>
+            <div class="pmenu-content">
+              <span class="pmenu-label">Sign Out</span>
+            </div>
+            <i data-lucide="chevron-right" class="pmenu-arrow"></i>
+          </div>
         </div>
       </div>
-      <div class="set-sec">
-        <div class="set-lbl"><i class="fas fa-envelope" style="margin-right:5px"></i>Account Info</div>
-        <div class="set-card">
-          <div class="info-row"><span>Email</span><strong id="setEmail">—</strong></div>
-          <div class="info-row"><span>Verified</span><strong id="setVerified">—</strong></div>
-          <div class="info-row"><span>Member Since</span><strong id="setJoined">—</strong></div>
-          <div class="info-row"><span>Badges</span><div id="setBadgeList"></div></div>
-          <div class="info-row"><span>Reputation</span><div id="setReputation"></div></div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="setNav(this); showScreen('home')"><i data-lucide="home"></i><span>Home</span></button>
+      <button class="nav-item" onclick="setNav(this); showScreen('map')"><i data-lucide="map"></i><span>Map</span></button>
+      <button class="fab-nav" onclick="showScreen('post-create')"><i data-lucide="plus"></i></button>
+      <button class="nav-item" onclick="setNav(this); showScreen('chat')"><i data-lucide="message-circle"></i><span>Chat</span></button>
+      <button class="nav-item active" onclick="setNav(this); showScreen('profile')"><i data-lucide="user"></i><span>Profile</span></button>
+    </nav>
+  </div>
+
+  <!-- ═══════════ SIDE MENU ═══════════ -->
+  <div id="screen-menu" class="screen app-screen">
+    <div class="side-menu-overlay" onclick="showScreen('home')"></div>
+    <div class="side-menu">
+      <div class="side-menu-header">
+        <div class="side-menu-user">
+          <img class="post-avatar lg" src="https://ui-avatars.com/api/?name=Juan+Cruz&background=dbeafe&color=1d4ed8&bold=true" alt="Juan"/>
+          <div>
+            <span class="post-author">Juan dela Cruz</span>
+            <div class="post-location"><i data-lucide="map-pin"></i> Batasan Hills</div>
+          </div>
+        </div>
+        <button class="btn-back" onclick="showScreen('home')"><i data-lucide="x"></i></button>
+      </div>
+      <div class="side-menu-nav">
+        <button class="side-nav-item" onclick="showScreen('home')"><i data-lucide="home"></i> Home Feed</button>
+        <button class="side-nav-item" onclick="showScreen('map')"><i data-lucide="map"></i> Incident Map</button>
+        <button class="side-nav-item" onclick="showScreen('chat')"><i data-lucide="message-circle"></i> Messages</button>
+        <button class="side-nav-item" onclick="showScreen('activity')"><i data-lucide="activity"></i> Activity</button>
+        <button class="side-nav-item" onclick="showScreen('profile')"><i data-lucide="user"></i> My Profile</button>
+        <div class="side-divider"></div>
+        <button class="side-nav-item" onclick="showScreen('admin')"><i data-lucide="layout-dashboard"></i> Admin Panel</button>
+        <button class="side-nav-item"><i data-lucide="phone"></i> Emergency Contacts</button>
+        <button class="side-nav-item"><i data-lucide="info"></i> About QCHelp</button>
+        <div class="side-divider"></div>
+        <button class="side-nav-item danger" onclick="showScreen('welcome')"><i data-lucide="log-out"></i> Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ADMIN SCREEN ═══════════ -->
+  <div id="screen-admin" class="screen app-screen">
+    <div class="inner-nav">
+      <button class="btn-back" onclick="showScreen('profile')"><i data-lucide="arrow-left"></i></button>
+      <h2 class="inner-title">Admin Dashboard</h2>
+      <button class="icon-btn"><i data-lucide="bell"></i></button>
+    </div>
+    <div class="screen-scroll pad">
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card blue">
+          <div class="admin-stat-icon"><i data-lucide="file-text"></i></div>
+          <div class="admin-stat-num">1,248</div>
+          <div class="admin-stat-lbl">Total Posts</div>
+        </div>
+        <div class="admin-stat-card green">
+          <div class="admin-stat-icon"><i data-lucide="users"></i></div>
+          <div class="admin-stat-num">3,587</div>
+          <div class="admin-stat-lbl">Active Users</div>
+        </div>
+        <div class="admin-stat-card orange">
+          <div class="admin-stat-icon"><i data-lucide="alert-circle"></i></div>
+          <div class="admin-stat-num">24</div>
+          <div class="admin-stat-lbl">Open Incidents</div>
+        </div>
+        <div class="admin-stat-card purple">
+          <div class="admin-stat-icon"><i data-lucide="check-circle"></i></div>
+          <div class="admin-stat-num">892</div>
+          <div class="admin-stat-lbl">Resolved</div>
         </div>
       </div>
-      <div class="set-sec danger-z">
-        <div class="set-lbl"><i class="fas fa-exclamation-triangle" style="margin-right:5px;color:var(--red)"></i>Danger Zone</div>
-        <div class="set-card">
-          <p class="danger-note">Deleting your account is permanent and cannot be undone.</p>
-          <button class="btn-danger" onclick="openDelModal()" type="button"><i class="fas fa-user-slash"></i> Delete My Account</button>
+
+      <div class="section-label">Pending Reports</div>
+      <div class="admin-report-list">
+        <div class="admin-report-item">
+          <div class="report-dot flood"></div>
+          <div class="report-content">
+            <span class="report-title">Flood — Batasan Hills</span>
+            <span class="report-sub">Maria Santos · 5 min ago</span>
+          </div>
+          <div class="report-actions">
+            <button class="btn btn-green xs">Approve</button>
+            <button class="btn btn-danger xs">Remove</button>
+          </div>
+        </div>
+        <div class="admin-report-item">
+          <div class="report-dot medical"></div>
+          <div class="report-content">
+            <span class="report-title">Medical — Blood Donor Needed</span>
+            <span class="report-sub">Jose Reyes · 18 min ago</span>
+          </div>
+          <div class="report-actions">
+            <button class="btn btn-green xs">Approve</button>
+            <button class="btn btn-danger xs">Remove</button>
+          </div>
+        </div>
+        <div class="admin-report-item">
+          <div class="report-dot traffic"></div>
+          <div class="report-content">
+            <span class="report-title">Traffic — EDSA-Cubao Closure</span>
+            <span class="report-sub">Carlos Mendoza · 2 hrs ago</span>
+          </div>
+          <div class="report-actions">
+            <button class="btn btn-green xs">Approve</button>
+            <button class="btn btn-danger xs">Remove</button>
+          </div>
         </div>
       </div>
-      <button class="btn-logout-s" onclick="doLogout()" type="button"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-    </div>
 
-  </main>
+      <div class="section-label">Barangay Coverage</div>
+      <div class="barangay-coverage">
+        <div class="coverage-item">
+          <span class="cov-name">Batasan Hills</span>
+          <div class="cov-bar"><div class="cov-fill" style="width:82%"></div></div>
+          <span class="cov-pct">82%</span>
+        </div>
+        <div class="coverage-item">
+          <span class="cov-name">Commonwealth</span>
+          <div class="cov-bar"><div class="cov-fill" style="width:74%"></div></div>
+          <span class="cov-pct">74%</span>
+        </div>
+        <div class="coverage-item">
+          <span class="cov-name">Fairview</span>
+          <div class="cov-bar"><div class="cov-fill" style="width:65%"></div></div>
+          <span class="cov-pct">65%</span>
+        </div>
+        <div class="coverage-item">
+          <span class="cov-name">Novaliches</span>
+          <div class="cov-bar"><div class="cov-fill" style="width:58%"></div></div>
+          <span class="cov-pct">58%</span>
+        </div>
+        <div class="coverage-item">
+          <span class="cov-name">Cubao</span>
+          <div class="cov-bar"><div class="cov-fill" style="width:91%"></div></div>
+          <span class="cov-pct">91%</span>
+        </div>
+      </div>
 
-  <!-- FOOTER -->
-  <footer class="app-footer" role="contentinfo">
-    <div class="footer-links">
-      <button class="flink" onclick="goTab('about')" type="button">About</button>
-      <span class="fdot" aria-hidden="true">·</span>
-      <button class="flink" onclick="goTab('guidelines')" type="button">Guidelines</button>
-      <span class="fdot" aria-hidden="true">·</span>
-      <button class="flink" onclick="openPrivacy()" type="button">Privacy</button>
-      <span class="fdot" aria-hidden="true">·</span>
-      <button class="flink" onclick="openTerms()" type="button">Terms</button>
-    </div>
-    <div class="footer-copy">© 2026 QC Help Support · Made with care for Quezon City</div>
-  </footer>
-
-  <!-- BOTTOM NAV -->
-  <nav class="bnav" role="navigation" aria-label="Bottom navigation">
-    <button class="bb active" id="bb-home" onclick="goTab('home')" type="button" aria-label="Home"><div class="bbiw"><i class="fas fa-home"></i></div><span>Home</span></button>
-    <button class="bb" id="bb-mapview" onclick="goTab('mapview')" type="button" aria-label="Map"><div class="bbiw"><i class="fas fa-map"></i></div><span>Map</span></button>
-    <button class="bb bb-fab" onclick="openPost()" type="button" aria-label="Create post"><div class="bb-fabcir"><i class="fas fa-plus"></i></div></button>
-    <button class="bb" id="bb-activity" onclick="goTab('activity')" type="button" aria-label="Activity"><div class="bbiw"><i class="fas fa-bell"></i><span class="bb-badge hidden" id="bbBadge">0</span></div><span>Activity</span></button>
-    <button class="bb" id="bb-account" onclick="goTab('account')" type="button" aria-label="Profile"><div class="bbiw"><i class="fas fa-user"></i></div><span>Profile</span></button>
-  </nav>
-</div>
-
-<!-- ═══════════ MODALS ═══════════ -->
-
-<!-- POST MODAL -->
-<div class="mo hidden" id="postMO" role="dialog" aria-modal="true" aria-labelledby="postMOTitle">
-  <div class="msheet" id="postSheet">
-    <div class="mhandle" aria-hidden="true"></div>
-    <div class="mtop">
-      <div class="cc-av small" id="pmAv" aria-hidden="true"></div>
-      <div><strong id="postMOTitle">New Post</strong><div id="pmBrgy" style="font-size:.77rem;color:var(--muted)"></div></div>
-      <button class="mclose" onclick="closeMO('postMO')" type="button" aria-label="Close"><i class="fas fa-times"></i></button>
-    </div>
-    <textarea id="pmTxt" placeholder="What's happening? Share info, ask for help…" maxlength="2000" oninput="pmCount()" aria-label="Post content"></textarea>
-    <div class="cc-count"><span id="pmCC">0</span>/2000</div>
-    <div class="pm-tags" role="group" aria-label="Post tags">
-      <button class="ptag active" data-tag="General" onclick="pickTag(this)" type="button"><i class="fas fa-bullhorn" style="font-size:.7rem;margin-right:3px"></i>General</button>
-      <button class="ptag" data-tag="Help Needed" onclick="pickTag(this)" type="button"><i class="fas fa-hand-holding-heart" style="font-size:.7rem;margin-right:3px"></i>Help Needed</button>
-      <button class="ptag" data-tag="Info" onclick="pickTag(this)" type="button"><span class="chip-dot cd-info"></span>Info</button>
-      <button class="ptag" data-tag="Flood" onclick="pickTag(this)" type="button"><span class="chip-dot cd-flood"></span>Flood</button>
-      <button class="ptag" data-tag="Medical" onclick="pickTag(this)" type="button"><span class="chip-dot cd-med"></span>Medical</button>
-      <button class="ptag" data-tag="Missing" onclick="pickTag(this)" type="button"><span class="chip-dot cd-miss"></span>Missing</button>
-      <button class="ptag" data-tag="Power" onclick="pickTag(this)" type="button"><span class="chip-dot cd-pow"></span>Power</button>
-      <button class="ptag" data-tag="Traffic" onclick="pickTag(this)" type="button"><span class="chip-dot cd-traf"></span>Traffic</button>
-      <button class="ptag" data-tag="Lost Person" onclick="pickTag(this)" type="button"><i class="fas fa-user" style="font-size:.7rem;margin-right:3px"></i>Lost Person</button>
-      <button class="ptag" data-tag="Lost Pet" onclick="pickTag(this)" type="button"><i class="fas fa-paw" style="font-size:.7rem;margin-right:3px"></i>Lost Pet</button>
-      <button class="ptag" data-tag="Lost Item" onclick="pickTag(this)" type="button"><i class="fas fa-shopping-bag" style="font-size:.7rem;margin-right:3px"></i>Lost Item</button>
-      <button class="ptag" data-tag="Found" onclick="pickTag(this)" type="button"><i class="fas fa-check-circle" style="font-size:.7rem;margin-right:3px"></i>Found</button>
-    </div>
-    <div class="iw" style="margin-bottom:10px"><i class="fas fa-map-marker-alt"></i><input type="text" id="pmLoc" placeholder="Location / Barangay (optional)" maxlength="200" aria-label="Location"/></div>
-    <div class="fg" style="margin-bottom:12px">
-      <label style="font-size:.8rem;font-weight:600;margin-bottom:6px;display:block"><i class="fas fa-bolt" style="color:var(--orange);margin-right:4px"></i>Urgency Level</label>
-      <div class="urgency-row" id="postUrgencyRow" role="group" aria-label="Urgency level">
-        <button class="urg-btn urg-high" data-u="high" onclick="pickPostUrgency(this)" type="button"><span class="urgdot"></span>High</button>
-        <button class="urg-btn urg-med active" data-u="medium" onclick="pickPostUrgency(this)" type="button"><span class="urgdot"></span>Medium</button>
-        <button class="urg-btn urg-low" data-u="low" onclick="pickPostUrgency(this)" type="button"><span class="urgdot"></span>Low</button>
+      <div class="section-label">Quick Actions</div>
+      <div class="admin-quick-actions">
+        <button class="admin-action-btn"><i data-lucide="send"></i> Broadcast Alert</button>
+        <button class="admin-action-btn"><i data-lucide="user-x"></i> Manage Users</button>
+        <button class="admin-action-btn"><i data-lucide="flag"></i> Flagged Content</button>
+        <button class="admin-action-btn"><i data-lucide="bar-chart-2"></i> Analytics</button>
       </div>
     </div>
-    <div class="img-upload-row">
-      <button class="img-pick-btn" onclick="document.getElementById('postImg').click()" type="button"><i class="fas fa-image"></i> Add Photo</button>
-      <span class="img-hint" id="imgHint">Optional · Max 5MB</span>
-      <input type="file" id="postImg" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none" onchange="previewPostImg(this)" aria-label="Post image"/>
-    </div>
-    <div id="postImgPreview" class="hidden"></div>
-    <div class="img-upload-prog hidden" id="imgUploadProg">
-      <div class="up-bar-wrap"><div class="up-bar" id="upBar"></div></div>
-      <span id="upPct">0%</span>
-    </div>
-    <button class="btn-post" id="postBtn" onclick="submitPost()" type="button"><i class="fas fa-paper-plane"></i> Post to Community</button>
   </div>
+
 </div>
+<!-- end #app -->
 
-<!-- COMMENT MODAL -->
-<div class="mo hidden" id="cmtMO" role="dialog" aria-modal="true" aria-labelledby="cmtMOTitle">
-  <div class="msheet tall" id="cmtSheet">
-    <div class="mhandle" aria-hidden="true"></div>
-    <div class="cmt-hdr">
-      <h3 id="cmtMOTitle">Comments</h3>
-      <div id="statusChanger" class="hidden">
-        <select id="statusSel" onchange="changePostStatus(this.value)" style="border:1.5px solid var(--border);border-radius:8px;padding:4px 8px;font-size:.78rem;font-weight:600" aria-label="Post status">
-          <option value="pending">Pending</option>
-          <option value="inprogress">In Progress</option>
-          <option value="resolved">Resolved</option>
-        </select>
-      </div>
-      <button class="mclose" onclick="closeMO('cmtMO')" type="button" aria-label="Close comments"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="cmt-prev" id="cmtPrev"></div>
-    <div class="cmt-list" id="cmtList" role="list"></div>
-    <div class="cmt-inp">
-      <div class="cc-av small" id="cmtAv" aria-hidden="true"></div>
-      <input type="text" id="cmtBox" placeholder="Write a comment…" maxlength="500" onkeydown="if(event.key==='Enter'){event.preventDefault();sendComment()}" aria-label="Comment input"/>
-      <button class="cmt-send" onclick="sendComment()" type="button" aria-label="Send comment"><i class="fas fa-paper-plane"></i></button>
-    </div>
-  </div>
-</div>
-
-<!-- EDIT POST MODAL -->
-<div class="mo hidden" id="editMO" role="dialog" aria-modal="true" aria-labelledby="editMOTitle">
-  <div class="msheet" id="editSheet">
-    <div class="mhandle" aria-hidden="true"></div>
-    <div class="mtop">
-      <strong id="editMOTitle"><i class="fas fa-edit" style="margin-right:6px;color:var(--green)"></i>Edit Post</strong>
-      <button class="mclose" onclick="closeMO('editMO')" type="button" aria-label="Close"><i class="fas fa-times"></i></button>
-    </div>
-    <textarea id="editTxt" placeholder="Edit your post…" maxlength="2000" oninput="document.getElementById('editCC').textContent=this.value.length" aria-label="Edit post content"></textarea>
-    <div class="cc-count"><span id="editCC">0</span>/2000</div>
-    <div class="iw" style="margin-bottom:10px"><i class="fas fa-map-marker-alt"></i><input type="text" id="editLoc" placeholder="Location…" maxlength="200" aria-label="Location"/></div>
-    <div class="fg" style="margin-bottom:12px">
-      <label style="font-size:.8rem;font-weight:600;margin-bottom:6px;display:block">Urgency Level</label>
-      <div class="urgency-row" id="editUrgency" role="group">
-        <button class="urg-btn urg-high" data-u="high" onclick="pickUrgency(this)" type="button"><span class="urgdot"></span>High</button>
-        <button class="urg-btn urg-med active" data-u="medium" onclick="pickUrgency(this)" type="button"><span class="urgdot"></span>Medium</button>
-        <button class="urg-btn urg-low" data-u="low" onclick="pickUrgency(this)" type="button"><span class="urgdot"></span>Low</button>
-      </div>
-    </div>
-    <button class="btn-post" id="editBtn" onclick="saveEdit()" type="button"><i class="fas fa-save"></i> Save Changes</button>
-  </div>
-</div>
-
-<!-- OFFER HELP MODAL -->
-<div class="mo hidden" id="offerMO" role="dialog" aria-modal="true" aria-labelledby="offerMOTitle">
-  <div class="msheet" id="offerSheet">
-    <div class="mhandle" aria-hidden="true"></div>
-    <div class="mtop">
-      <strong id="offerMOTitle"><i class="fas fa-hands-helping" style="margin-right:6px;color:var(--green)"></i>Offer Help</strong>
-      <button class="mclose" onclick="closeMO('offerMO')" type="button" aria-label="Close"><i class="fas fa-times"></i></button>
-    </div>
-    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px">How can you help? Select one:</p>
-    <div class="offer-opts" id="offerOpts" role="radiogroup">
-      <button class="offer-opt" onclick="pickOffer(this,'I can personally assist you.')" type="button" role="radio" aria-checked="false"><i class="fas fa-user" style="margin-right:8px;color:var(--green)"></i>I can personally assist</button>
-      <button class="offer-opt" onclick="pickOffer(this,'I can provide supplies or resources.')" type="button" role="radio" aria-checked="false"><i class="fas fa-box" style="margin-right:8px;color:var(--green)"></i>I can provide supplies</button>
-      <button class="offer-opt" onclick="pickOffer(this,'I can give you a ride or transport.')" type="button" role="radio" aria-checked="false"><i class="fas fa-car" style="margin-right:8px;color:var(--green)"></i>I can give a ride</button>
-      <button class="offer-opt" onclick="pickOffer(this,'I can coordinate with local authorities.')" type="button" role="radio" aria-checked="false"><i class="fas fa-landmark" style="margin-right:8px;color:var(--green)"></i>I can contact authorities</button>
-      <button class="offer-opt" onclick="pickOffer(this,'I can provide medical assistance.')" type="button" role="radio" aria-checked="false"><i class="fas fa-heartbeat" style="margin-right:8px;color:var(--green)"></i>Medical assistance</button>
-    </div>
-    <textarea class="fta" id="offerNote" placeholder="Add a personal message (optional)…" style="margin:11px 0;height:70px" maxlength="300" aria-label="Personal message"></textarea>
-    <button class="btn-post" id="offerBtn" onclick="submitOffer()" type="button" disabled><i class="fas fa-hands-helping"></i> Send Offer</button>
-  </div>
-</div>
-
-<!-- SHARE MODAL -->
-<div class="mo hidden" id="shareMO" role="dialog" aria-modal="true" aria-labelledby="shareMOTitle">
-  <div class="msheet" id="shareSheet">
-    <div class="mhandle" aria-hidden="true"></div>
-    <h3 id="shareMOTitle" style="margin-bottom:16px;font-size:1rem"><i class="fas fa-share-alt" style="color:var(--green)"></i> Share Post</h3>
-    <div class="share-opts">
-      <button class="share-btn" onclick="doShare('copy')" type="button"><i class="fas fa-link"></i><span>Copy Link</span></button>
-      <button class="share-btn" onclick="doShare('facebook')" type="button"><i class="fab fa-facebook"></i><span>Facebook</span></button>
-      <button class="share-btn" onclick="doShare('twitter')" type="button"><i class="fab fa-twitter"></i><span>Twitter/X</span></button>
-      <button class="share-btn" onclick="doShare('messenger')" type="button"><i class="fab fa-facebook-messenger"></i><span>Messenger</span></button>
-      <button class="share-btn" onclick="doShare('viber')" type="button"><i class="fab fa-viber"></i><span>Viber</span></button>
-      <button class="share-btn" onclick="doShare('sms')" type="button"><i class="fas fa-sms"></i><span>SMS</span></button>
-    </div>
-    <div class="share-preview hidden" id="sharePreview"></div>
-    <button class="btn-sec" style="width:100%;justify-content:center;margin-top:8px" onclick="closeMO('shareMO')" type="button">Cancel</button>
-  </div>
-</div>
-
-<!-- REPORT POST MODAL -->
-<div class="mo hidden" id="reportMO" role="dialog" aria-modal="true" aria-labelledby="reportMOTitle">
-  <div class="msheet" id="reportSheet">
-    <div class="mhandle" aria-hidden="true"></div>
-    <h3 id="reportMOTitle" style="margin-bottom:14px;font-size:1rem"><i class="fas fa-flag" style="color:var(--red)"></i> Report Post</h3>
-    <p style="font-size:.82rem;color:var(--muted);margin-bottom:13px">Why are you reporting this post?</p>
-    <div class="rep-opts" role="radiogroup">
-      <button class="rep-opt" onclick="pickReport(this,'spam')" type="button"><i class="fas fa-envelope" style="margin-right:8px"></i>Spam</button>
-      <button class="rep-opt" onclick="pickReport(this,'fake')" type="button"><i class="fas fa-times-circle" style="margin-right:8px"></i>Fake Request</button>
-      <button class="rep-opt" onclick="pickReport(this,'inappropriate')" type="button"><i class="fas fa-ban" style="margin-right:8px"></i>Inappropriate</button>
-      <button class="rep-opt" onclick="pickReport(this,'misinformation')" type="button"><i class="fas fa-newspaper" style="margin-right:8px"></i>Misinformation</button>
-      <button class="rep-opt" onclick="pickReport(this,'other')" type="button"><i class="fas fa-list" style="margin-right:8px"></i>Other</button>
-    </div>
-    <textarea class="fta" id="repNote" placeholder="Add details (optional)…" style="margin:11px 0;height:70px" maxlength="300" aria-label="Report details"></textarea>
-    <button class="btn-danger" id="repSubmitBtn" onclick="submitReport2()" type="button" disabled><i class="fas fa-flag"></i> Submit Report</button>
-    <button class="btn-sec" style="width:100%;margin-top:8px;justify-content:center" onclick="closeMO('reportMO')" type="button">Cancel</button>
-  </div>
-</div>
-
-<!-- USER PROFILE MODAL -->
-<div class="mo hidden" id="userMO" role="dialog" aria-modal="true" aria-labelledby="umoName">
-  <div class="msheet" id="userSheet">
-    <div class="mhandle" aria-hidden="true"></div>
-    <button class="mclose" style="position:absolute;top:22px;right:15px" onclick="closeMO('userMO')" type="button" aria-label="Close"><i class="fas fa-times"></i></button>
-    <div style="text-align:center;padding:8px 0 18px">
-      <div class="user-mo-av" id="umoAv"></div>
-      <h3 id="umoName" style="margin:10px 0 3px;font-family:var(--disp);font-size:1.3rem"></h3>
-      <div id="umoBadges" class="badge-row" style="justify-content:center;margin-bottom:4px"></div>
-      <div id="umoBrgy" style="color:var(--muted);font-size:.82rem;margin-bottom:8px"></div>
-      <div class="role-chip" id="umoRole"></div>
-    </div>
-    <div id="umoRep" style="padding:0 0 10px;text-align:center"></div>
-    <div class="prof-stats" style="margin:0 0 14px">
-      <div class="ps-item"><strong id="umoPosts">0</strong><small>Posts</small></div>
-      <div class="ps-item"><strong id="umoHelped">0</strong><small>Helped</small></div>
-      <div class="ps-item"><strong id="umoJoined">—</strong><small>Joined</small></div>
-    </div>
-    <h4 style="font-size:.88rem;margin-bottom:9px">Recent Posts</h4>
-    <div id="umoPostList" style="max-height:240px;overflow-y:auto"></div>
-  </div>
-</div>
-
-<!-- DELETE ACCOUNT MODAL -->
-<div class="mo hidden" id="delMO" role="dialog" aria-modal="true" aria-labelledby="delMOTitle">
-  <div class="msheet" id="delSheet">
-    <div class="mhandle" aria-hidden="true"></div>
-    <div style="text-align:center;padding:8px 0 16px">
-      <div style="width:56px;height:56px;margin:0 auto 14px;background:#fee2e2;border-radius:16px;display:flex;align-items:center;justify-content:center" aria-hidden="true"><i class="fas fa-exclamation-triangle" style="font-size:1.6rem;color:var(--red)"></i></div>
-      <h3 id="delMOTitle" style="color:var(--red);margin-bottom:8px">Delete Account?</h3>
-      <p style="color:var(--muted);font-size:.88rem;line-height:1.5">This permanently deletes your account and cannot be undone.</p>
-    </div>
-    <div class="fg" style="margin-top:16px">
-      <label for="delConfirm">Type <strong>DELETE</strong> to confirm</label>
-      <div class="iw"><i class="fas fa-keyboard"></i><input type="text" id="delConfirm" placeholder="Type DELETE" maxlength="10"/></div>
-    </div>
-    <button class="btn-danger" style="width:100%;margin-top:8px;margin-bottom:10px" onclick="confirmDelete()" type="button"><i class="fas fa-user-slash"></i> Yes, Delete My Account</button>
-    <button class="btn-sec" style="width:100%" onclick="closeMO('delMO')" type="button">Cancel</button>
-  </div>
-</div>
-
-<!-- PROGRESS OVERLAY (upload) -->
-<div class="prog-overlay hidden" id="progOverlay" role="status" aria-live="polite">
-  <div class="prog-box">
-    <div class="prog-spinner"><i class="fas fa-spinner fa-spin"></i></div>
-    <div class="prog-msg" id="progMsg">Uploading…</div>
-    <div class="prog-bar-wrap"><div class="prog-bar" id="progBar"></div></div>
-    <div class="prog-pct" id="progPct">0%</div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast hidden" id="toast" role="alert" aria-live="assertive"></div>
-
-<script src="app.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
-
