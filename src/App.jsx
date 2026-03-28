@@ -13,6 +13,7 @@ import ChatUI from './pages/ChatUI'
 import ActivityPage from './pages/ActivityPage'
 import ProfilePage from './pages/ProfilePage'
 import AdminPanel from './pages/AdminPanel'
+import MainDashboard from './pages/MainDashboard'
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/activity" element={<ActivityPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/dashboard" element={<MainDashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
